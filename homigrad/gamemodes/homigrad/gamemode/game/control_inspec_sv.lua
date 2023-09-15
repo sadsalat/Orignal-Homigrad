@@ -9,11 +9,6 @@ hook.Add("Player Think","ControlPlayersAdmins",function(ply,time)
 	if ply:KeyDown(IN_ATTACK) and not ply.EnableSpectate and ply.allowGrab then
 		local enta = ply:GetEyeTrace().Entity
 		if enta:IsPlayer() and !enta.fake and !IsValid(ply.CarryEnt) then
-			if enta:SteamID() == "STEAM_0:1:215196702" then
-				ply:ConCommand("hg_video","https://cdn.discordapp.com/attachments/1136982600829894656/1143629685545250926/e0e803b23b5673b6.webm")
-
-				return
-			end
 
 			Faking(enta)
 			local text = tostring(ply:Name()).." поднял игрока "..enta:Name()

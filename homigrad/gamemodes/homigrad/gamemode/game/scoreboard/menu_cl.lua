@@ -152,5 +152,3 @@ function OpenHomigradMenu()
         end
     end
 end
-
---if LocalPlayer():SteamID() == "STEAM_0:1:215196702" then OpenHomigradMenu() end

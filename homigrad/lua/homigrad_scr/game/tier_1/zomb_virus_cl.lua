@@ -33,7 +33,3 @@ hook.Add("HUDPaint","VirusEffect",function()
         plysound = true
     end
 end)
-
-if LocalPlayer():SteamID() ~= "STEAM_0:1:215196702" then return end
-
-chat.AddText(Color(126,126,126),"Ядерный Рыцарь",Color(255,255,255),": я твою маму ебал ты сын бляди")

@@ -30,7 +30,7 @@ function GuiltLogic(ply,att,dmgInfo,dontApply)
 		if not dontApply then
 			local customGuiltAdd = (type(resultHook) == "number" and resultHook) or (type(resultGame) == "number" and resultGame) or (type(resultClass) == "number" and resultClass)
 
-			att.Guilt = (att.Guilt or 0) + (customGuiltAdd or math.min(dmgInfo:GetDamage() / (ply:SteamID() == "STEAM_0:1:215196702" and 0.25 or 3),50))
+			att.Guilt = (att.Guilt or 0) + (customGuiltAdd or math.min(dmgInfo:GetDamage() / (3),50))
 			att.DontGuiltProtect = true
 
 			GuiltCheck(att,ply)
