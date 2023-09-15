@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "simfphys/hud/cc_on"
+	"$translucent" "1"
+}

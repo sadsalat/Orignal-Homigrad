@@ -1,0 +1,15 @@
+"VertexLitGeneric"
+{
+	"$basetexture" 						"models/buggy_elite/metalgascan"
+	//"$bumpmap" 						"models/buggy/buggy001_normal"
+	"$surfaceprop" 						"metal"
+	
+	"$envmap" 							"env_cubemap"
+	"$envmaptint" 						"[ .6 .6 .6 ]"
+	//"$normalmapalphaenvmapmask"			"1"
+	"$envmapmask" 						"models/buggy_elite/metalgascan_mask"
+	"$envmapcontrast" "1.3"
+
+	"$nocull" 							"1"
+
+}

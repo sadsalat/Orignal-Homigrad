@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "simfphys/hud/handbrake_off"
+	"$translucent" "1"
+}

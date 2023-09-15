@@ -1,0 +1,6 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/bf2/helicopters/Mil Mi-28/Mil Mi-28_forest"
+	"$bumpmap" "models/bf2/helicopters/Mil Mi-28/Mil Mi-28_bump"
+
+}

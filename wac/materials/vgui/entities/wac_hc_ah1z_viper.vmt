@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	"$basetexture"			"VGUI/entities/wac_hc_ah1z_viper.vmt"
+	"$vertexcolor" 			1
+	"$vertexalpha" 			1
+	"$nolod" 				1
+}

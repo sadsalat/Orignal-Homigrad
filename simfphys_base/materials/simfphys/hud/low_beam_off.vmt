@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "simfphys/hud/low_beam_off"
+	"$translucent" "1"
+}

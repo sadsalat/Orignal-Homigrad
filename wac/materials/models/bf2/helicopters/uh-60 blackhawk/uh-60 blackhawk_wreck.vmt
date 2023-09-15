@@ -1,0 +1,6 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/bf2/helicopters/UH-60 BlackHawk/UH-60 BlackHawk_wreck"
+	"$bumpmap" "models/bf2/helicopters/UH-60 BlackHawk/UH-60 BlackHawk_bump"
+
+}

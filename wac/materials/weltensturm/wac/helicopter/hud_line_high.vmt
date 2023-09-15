@@ -1,0 +1,6 @@
+"UnlitGeneric"
+{
+	"$baseTexture"		"WeltEnSTurm/WAC/Helicopter/hud_line_high"
+	"$model"			"1"
+	"$translucent" 		"1"
+}

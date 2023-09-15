@@ -1,0 +1,6 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/BF2/helicopters/AH-1 Cobra/blur"
+	"$translucent" 1
+	"$nocull" "1"
+}

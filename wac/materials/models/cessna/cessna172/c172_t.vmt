@@ -1,0 +1,6 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models\cessna\cessna172\c172_t"
+	"$bumpmap" "models\cessna\cessna172\c172_t_bump"
+
+}

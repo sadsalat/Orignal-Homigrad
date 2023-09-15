@@ -1,0 +1,18 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/Flyboi/littlebird/littlebird_col"
+	"$bumpmap" "models/Flyboi/littlebird/littlebird_nml"
+	"$phong" 		"1"
+	"$phongexponent" 		"30"
+	"$phongboost" 		"0.2"
+	"$phongfresnelranges" 	"[1 3 6]"
+	"$phongalbedotint"		"1"
+} 
+
+
+
+
+
+
+
+

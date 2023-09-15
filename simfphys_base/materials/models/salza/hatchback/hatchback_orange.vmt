@@ -1,0 +1,12 @@
+VertexLitGeneric
+{
+$baseTexture "models\salza\hatchback/hatchback_orange"
+$blendtintbybasealpha 1
+$surfaceprop metal
+$model 1
+$envmaptint "[0.3 0.3 0.3]"
+$envmap env_cubemap
+$envmapfresnel 1
+$envmapFresnelMinMaxExp "[.1 2 3]"
+$envmapmask "Models/salza/hatchback/hatchback_ref"
+}

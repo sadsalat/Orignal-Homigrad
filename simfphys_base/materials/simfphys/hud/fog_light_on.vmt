@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "simfphys/hud/fog_light_on"
+	"$translucent" "1"
+}
