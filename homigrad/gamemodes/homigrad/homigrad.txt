@@ -1,7 +1,0 @@
-"homigrad"
-{
-	"base"		"sandbox"
-	"title"		"Homigrad"
-	"maps"		""
-	"menusystem"	"1"
-}

@@ -1,6 +1,0 @@
-"VertexlitGeneric"
-{
-	"$basetexture" "models/gtav/dukes/vehicle_generic_tyrewallblack"
-	"$bumpmap" "models/gtav/dukes/vehicle_generic_tyrewall_normal"
-	"$colorfix" "{255 255 255}"
-}

@@ -1,0 +1,7 @@
+"homigrad"
+{
+	"base"		"base"
+	"title"		"Homigrad"
+	"maps"		""
+	"menusystem"	"1"
+}

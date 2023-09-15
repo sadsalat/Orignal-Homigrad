@@ -1,6 +1,0 @@
-"VertexLitGeneric"
-{
-	"$model" "1"
-	"$basetexture" "models/prop_vehicles/synvan_black"
-	"$bump" "models/prop_vehicles/synvan_normal"
-}
