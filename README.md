@@ -1,11 +1,17 @@
-# Original-Homigraded
+# Original-Homigrad
 # _You've been waiting. We did it._ 
-from now on the “Homigraded” mode is now open access for you, for everyone.
+From now on the “Homigrad” gamemode is now open source for everyone.
 
 
-Thanks for your work: Sadsalat, Useless and Mr. Point
-- 0oa f*ck you / you stupid
+Contributors: Sadsalat, Useless and Mr. Point
 
+- Shame to 0oa for betraying us at the gamemode online peak. 
 
 # How to install?
-just put it in addons and download the colection https://steamcommunity.com/sharedfiles/filedetails/?id=2957550771 and https://steamcommunity.com/sharedfiles/filedetails/?id=3011836097
+Just put it in addons and download the following collections:
+
+https://steamcommunity.com/sharedfiles/filedetails/?id=2957550771
+
+and
+
+https://steamcommunity.com/sharedfiles/filedetails/?id=3011836097
