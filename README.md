@@ -1,6 +1,6 @@
 # Original-Homigrad
 # _You've been waiting. We did it._ 
-From now on the “Homigrad” gamemode is now open source for everyone.
+From now on the “Homigrad” gamemode is open source for everyone.
 
 
 Contributors: Sadsalat, Useless and Mr. Point
