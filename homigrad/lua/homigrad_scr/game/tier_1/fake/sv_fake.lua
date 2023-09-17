@@ -1094,7 +1094,7 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			head:ComputeShadowControl(shadowparams)
 		end
 		end
-		if(ply:KeyDown(IN_SPEED)) and !RagdollOwner(rag).Otrub and !timer.Exists("StunTime"..ply:EntIndex()) then
+		if(ply:KeyDown(IN_SPEED)) and (RagdollOwner(rag) and !RagdollOwner(rag).Otrub) and !timer.Exists("StunTime"..ply:EntIndex()) then
 			local bone = rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" ))
 			local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) )
 			if ply.Organs["artery"] == 0 and !TwoHandedOrNo[ply.curweapon] then
