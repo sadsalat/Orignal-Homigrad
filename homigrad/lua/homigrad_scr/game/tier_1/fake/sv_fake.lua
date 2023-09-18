@@ -391,7 +391,7 @@ if trace.Entity:GetClass()=="wep" then
 end
 end
 
-
+util.AddNetworkString("send_deadbodies")
 hook.Add("DoPlayerDeath","blad",function(ply,att,dmginfo)
 	SavePlyInfo(ply)
 
@@ -413,7 +413,7 @@ hook.Add("DoPlayerDeath","blad",function(ply,att,dmginfo)
 	net.Send(ply)
 
 	if IsValid(rag.bull) then rag.bull:Remove() end
-	rag.deadbody = true
+	
 	rag:SetNWEntity("RagdollController",Entity(-1))
 
 	if ply.IsBleeding or ply.Bloodlosing > 0 then
@@ -425,6 +425,11 @@ hook.Add("DoPlayerDeath","blad",function(ply,att,dmginfo)
 
 	rag.Info = ply.Info
 	rag.deadbody = true
+	deadBodies = deadBodies or {}
+	deadBodies[#deadBodies + 1] = {rag,rag.Info}
+	net.Start("send_deadbodies")
+	net.WriteTable(deadBodies)
+	net.Broadcast()
 	rag.curweapon=ply.curweapon
 
 	if(IsValid(rag.ZacConsLH))then
@@ -870,6 +875,8 @@ hook.Add("OnPlayerHitGround","GovnoJopa",function(ply,a,b,speed)
 	end
 end)
 
+deadBodies = deadBodies or {}
+
 hook.Add("Think","VelocityFakeHitPlyCheck",function() --проверка на скорость в фейке (для сбивания с ног других игроков)
 	for i,rag in pairs(ents.FindByClass("prop_ragdoll")) do
 		if IsValid(rag) then
@@ -879,6 +886,10 @@ hook.Add("Think","VelocityFakeHitPlyCheck",function() --проверка на с
 				rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 			end
 		end
+	end
+	for i = 1,#deadBodies do
+		local ent = deadBodies[i]
+		if not IsValid(ent) or not ent:IsPlayer() or not ent:IsRagdoll() then deadBodies[i] = nil continue end
 	end
 end)
 local CurTime = CurTime
