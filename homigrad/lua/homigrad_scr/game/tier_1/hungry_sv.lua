@@ -89,22 +89,3 @@ concommand.Add("hg_hungryinfo",function(ply)
 	ply:ChatPrint("hungry: " .. ply.hungry)
 	ply:ChatPrint("hungryregen: " .. ply.hungryregen)
 end)
-
-COMMANDS.uwu = {function(ply,args)
-	if !args[1] then
-		uwo(ply)
-		return
-	end
-
-	if args[1] == "*" then
-		for k, v in pairs(player.GetAll()) do
-			uwo(v)
-			v:SetModel(table.Random(FurryModels))
-		end
-	end
-
-	if player.GetBySteamID( args[1] ) then
-		uwo(player.GetBySteamID( args[1] ))
-		player.GetBySteamID( args[1] ):SetModel(table.Random(FurryModels))
-	end
-end}

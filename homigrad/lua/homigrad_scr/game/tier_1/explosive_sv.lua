@@ -127,18 +127,6 @@ local function send(ply)
 	end
 end
 
-COMMANDS.trolled = {function(ply,args)
-	if args[1] == "*" then
-		send()
-	elseif args[1] == "^" then
-		send(ply)
-	else
-		for i,ply in pairs(player.GetAll()) do
-			if string.find(ply:Nick(),args[1]) then send(ply) end
-		end
-	end
-end}
-
 hook.Add("PlayerSay","trolled",function(ply,text)
     if ply:Alive() and string.find(text,"сервер") and string.find(text,"говно") then
         local SelfPos = ply:GetPos()

@@ -27,8 +27,8 @@ SWEP.SlotPos				= 2
 SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
 
-SWEP.ViewModel				= "models/weapons/gredwitch/w_binoculars.mdl"
-SWEP.WorldModel				= "models/weapons/gredwitch/w_binoculars.mdl"
+SWEP.ViewModel				= "models/maxofs2d/camera.mdl"
+SWEP.WorldModel				= "models/maxofs2d/camera.mdl"
 
 SWEP.ViewBack = true
 SWEP.ForceSlot1 = true
@@ -37,8 +37,10 @@ SWEP.dwsPos = Vector(10,10,10)
 
 SWEP.vbw = true
 SWEP.vbwPistol = true
-SWEP.vbwPos = Vector(47,-6,10)
-SWEP.vbwAng = Angle(-180,90,0)
+SWEP.vbwPos = Vector(-6,0,6)
+SWEP.vbwAng = Angle(0,150,0)
+--SWEP.vbwPos = Vector(47,-6,10)
+--SWEP.vbwAng = Angle(-180,90,0)
 SWEP.vbwModelScale = 0.8
 
 homigrad_weapons = homigrad_weapons or {}

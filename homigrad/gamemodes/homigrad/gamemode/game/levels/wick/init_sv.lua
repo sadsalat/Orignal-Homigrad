@@ -20,10 +20,6 @@ local function makeT(ply)
     ply:ChatPrint("Вы Джон Уик.")
 end
 
-COMMANDS.nopain = {function(ply,args)
-    ply.nopain = args[1]
-end}
-
 function wick.SpawnsCT()
     local aviable = {}
 

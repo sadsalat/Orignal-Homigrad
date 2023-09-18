@@ -58,13 +58,13 @@ COMMANDS.noguilt = {function(ply,args)
 	end
 end,1}
 
---[[COMMANDS.fake = {function(ply,args)
+COMMANDS.fake = {function(ply,args)
 	if not ply:IsAdmin() then return end
 
 	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
 		Faking(ply)
 	end
-end,1}]]--
+end,1}
 
 function GuiltCheck(att,ply)
 	if att.Guilt >= 100 then

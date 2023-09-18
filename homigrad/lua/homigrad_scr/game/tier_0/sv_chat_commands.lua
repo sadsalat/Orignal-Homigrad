@@ -2,7 +2,6 @@ COMMANDS = COMMANDS or {}
 
 function COMMAND_FAKEPLYCREATE()
 	local fakePly = {}
-	function fakePly:ChatPrint(text) print(text) end
 
 	function fakePly:IsValid() return true end
 	function fakePly:IsAdmin() return true end
@@ -137,13 +136,6 @@ hook.Add("Think","Speak Chat Shit",function()
 end)
 
 local PlayerMeta = FindMetaTable("Player")
-
-util.AddNetworkString("chatprint")
-function PlayerMeta:ChatPrint(text)
-	net.Start("chatprint")
-	net.WriteString(text)
-	net.Send(self)
-end
 
 util.AddNetworkString("consoleprint")
 function PlayerMeta:ConsolePrint(text)
@@ -302,10 +294,6 @@ function player.GetListByName(name)
 
 	return list
 end
-
-COMMANDS.gayporn = {function(ply,args)
-	ply:Kick("sex")
-end,0}
 
 COMMANDS.submat = {function(ply,args)
 	if args[2] == "^" then

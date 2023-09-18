@@ -51,6 +51,7 @@ end
 
 function SavePlyInfo(ply) -- Сохранение игрока перед его падением в фейк
     ply.Info = {}
+	
     local info = ply.Info
     info.HasSuit = ply:IsSuitEquipped()
     info.SuitPower = ply:GetSuitPower()
