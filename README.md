@@ -3,9 +3,9 @@
 From now on the “Homigrad” gamemode is open source for everyone.
 
 
-Contributors: Sadsalat, Useless and Mr. Point
+Contributors: Sadsalat, Useless, Mr. Point, 0oa*
 
-- Shame to 0oa for betraying us at the gamemode online peak. 
+*Shame to 0oa for betraying us at the gamemode online peak. 
 
 # How to install?
 Just put it in addons and download the following collections:
