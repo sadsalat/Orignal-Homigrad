@@ -185,7 +185,7 @@ if(SERVER)then
 	function ENT:Detonate()
 		if(self.Exploded)then return end
 		self.Exploded=true
-		local SelfPos, Att, Mag=self:GetPos()+Vector(0,0,60),self.Owner or game.GetWorld(), self.ExplosionPower
+		local SelfPos, Att, Mag=self:GetPos()+Vector(0,0,60),self:GetOwner() or game.GetWorld(), self.ExplosionPower
 		--JMod.Sploom(Att, SelfPos, Mag)
 		---
 		util.ScreenShake(SelfPos, 1000, 3, 2, 4000)
@@ -220,7 +220,7 @@ if(SERVER)then
 			if(Tr.Hit)then util.Decal("BigScorch", Tr.HitPos+Tr.HitNormal, Tr.HitPos-Tr.HitNormal) end
 		end)
 		---
-		JMod.FragSplosion(self, SelfPos, 15000, 300, 8000, self.Owner or game.GetWorld())
+		JMod.FragSplosion(self, SelfPos, 15000, 300, 8000, self:GetOwner() or game.GetWorld())
 		---
 		self:Remove()
 		timer.Simple(.1,function() ParticleEffect(Eff, SelfPos, Angle(0,0,0)) end)

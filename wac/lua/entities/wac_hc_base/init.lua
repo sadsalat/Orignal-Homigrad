@@ -147,7 +147,7 @@ function ENT:addEntity(name)
 	local e = ents.Create(name)
 	if not IsValid(e) then return nil end
 	table.insert(self.entities, e)
-	e.Owner = self.Owner
+	e.Owner = self:GetOwner()
 	e:SetNWString("Owner", "World")
 	return e
 end
@@ -193,7 +193,7 @@ function ENT:addRotors()
 		self.topRotor:SetModel("models/props_junk/sawblade001a.mdl")
 		self.topRotor:SetPos(self:LocalToWorld(self.TopRotor.pos))
 		self.topRotor:SetAngles(self:LocalToWorldAngles(self.TopRotor.angles))
-		self.topRotor:SetOwner(self.Owner)
+		self.topRotor:SetOwner(self:GetOwner())
 		self.topRotor:SetNotSolid(true)
 		self.topRotor:Spawn()
 		self.topRotor.Phys = self.topRotor:GetPhysicsObject()
@@ -266,7 +266,7 @@ function ENT:addBackRotor()
 	e:SetModel(self.BackRotor.model)
 	e:SetAngles(self:LocalToWorldAngles(self.BackRotor.angles))
 	e:SetPos(self:LocalToWorld(self.BackRotor.pos))
-	e.Owner = self.Owner
+	e.Owner = self:GetOwner()
 	e:SetNWFloat("rotorhealth", 100)
 	e.wac_ignore = true
 	e.TouchFunc = function(touchedEnt, pos) -- not colliding with world

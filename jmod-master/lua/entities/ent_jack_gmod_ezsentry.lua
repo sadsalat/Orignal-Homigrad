@@ -365,12 +365,12 @@ if(SERVER)then
 	end
 
 	function ENT:TurnOn(activator)
-		local OldOwner = self.Owner
+		local OldOwner = self:GetOwner()
 		JMod.SetOwner(self, activator)
 
-		if IsValid(self.Owner) then
+		if IsValid(self:GetOwner()) then
 			-- if owner changed then reset team color
-			if OldOwner ~= self.Owner then
+			if OldOwner ~= self:GetOwner() then
 				JMod.Colorify(self)
 			end
 		end
@@ -487,7 +487,7 @@ if(SERVER)then
 		self.SearchData.State = 0
 		self:SetState(STATE_ENGAGING)
 		self:EmitSound("snds_jack_gmod/ezsentry_engage.wav", 65, 100)
-		JMod.Hint(self.Owner, "sentry upgrade")
+		JMod.Hint(self:GetOwner(), "sentry upgrade")
 	end
 
 	function ENT:Disengage()
@@ -504,7 +504,7 @@ if(SERVER)then
 		self.SearchData.State = 0
 		self:SetState(STATE_WATCHING)
 		self:EmitSound("snds_jack_gmod/ezsentry_standdown.wav", 65, 100)
-		JMod.Hint(self.Owner, "sentry modify")
+		JMod.Hint(self:GetOwner(), "sentry modify")
 	end
 
 	function ENT:Think()
@@ -723,7 +723,7 @@ if(SERVER)then
 			ShootDir = (ShootDir + VectorRand() * math.Rand(.05, 1) * Inacc):GetNormalized()
 
 			local Ballut = {
-				Attacker = self.Owner or self,
+				Attacker = self:GetOwner() or self,
 				Callback = nil,
 				Damage = Dmg,
 				Force = Force,
@@ -756,7 +756,7 @@ if(SERVER)then
 			sound.Play("snds_jack_gmod/sentry_far.wav", SelfPos + Up, 100, math.random(90, 110))
 
 			local Ballut = {
-				Attacker = self.Owner or self,
+				Attacker = self:GetOwner() or self,
 				Callback = nil,
 				Damage = Dmg,
 				Force = Force,
@@ -866,7 +866,7 @@ if(SERVER)then
 			Gnd:SetPos(ShootPos)
 			ShootAng:RotateAroundAxis(ShootAng:Right(), -90)
 			Gnd:SetAngles(ShootAng)
-			JMod.SetOwner(Gnd, self.Owner or self)
+			JMod.SetOwner(Gnd, self:GetOwner() or self)
 			Gnd.Dmg = Dmg
 			Gnd:Spawn()
 			Gnd:Activate()
@@ -904,7 +904,7 @@ if(SERVER)then
 				util.Effect("eff_jack_heavylaserbeamimpact", Derp2, true, true)
 				---
 				local DmgInfo = DamageInfo()
-				DmgInfo:SetAttacker(self.Owner or self)
+				DmgInfo:SetAttacker(self:GetOwner() or self)
 				DmgInfo:SetInflictor(self)
 
 				if Tr.Entity:IsOnFire() then

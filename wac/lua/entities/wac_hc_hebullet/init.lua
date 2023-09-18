@@ -41,16 +41,16 @@ ENT.Explode=function(self,tr)
 	if self.Exploded then return end
 	self.Exploded = true
 	if !tr.HitSky then
-		self.Owner = self.Owner or self.Entity
+		self:GetOwner() = self:GetOwner() or self.Entity
 		local explode=ents.Create("env_physexplosion")
 		explode:SetPos(tr.HitPos)
-		explode:SetOwner(self.Owner)
+		explode:SetOwner(self:GetOwner())
 		explode:Spawn()
 		explode:SetKeyValue("magnitude", self.Damage/4)
 		explode:SetKeyValue("radius", self.Radius)
 		explode:Fire("Explode", 0, 0)
 		timer.Simple(5,function() explode:Remove() end)
-		util.BlastDamage(self, self.Owner, tr.HitPos, self.Radius, self.Damage)
+		util.BlastDamage(self, self:GetOwner(), tr.HitPos, self.Radius, self.Damage)
 
 		--[[net.Start("gred_net_createparticle")
 		

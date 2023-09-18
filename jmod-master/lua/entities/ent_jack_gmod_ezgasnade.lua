@@ -32,7 +32,7 @@ if SERVER then
 	function ENT:Detonate()
 		if self.Exploded then return end
 		self.Exploded = true
-		local SelfPos, Owner, SelfVel = self:LocalToWorld(self:OBBCenter()), self.Owner or self, self:GetPhysicsObject():GetVelocity()
+		local SelfPos, Owner, SelfVel = self:LocalToWorld(self:OBBCenter()), self:GetOwner() or self, self:GetPhysicsObject():GetVelocity()
 		local Boom = ents.Create("env_explosion")
 		Boom:SetPos(SelfPos)
 		Boom:SetKeyValue("imagnitude", "50")
@@ -51,8 +51,8 @@ if SERVER then
 			end)
 		end
 
-		if IsValid(self.Owner) then
-			JMod.Hint(self.Owner, "gas spread", self:GetPos())
+		if IsValid(self:GetOwner()) then
+			JMod.Hint(self:GetOwner(), "gas spread", self:GetPos())
 		end
 
 		self:Remove()

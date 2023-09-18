@@ -44,7 +44,7 @@ if SERVER then
     function SWEP:PrimaryAttack()
         if self.alalal then return end
 
-        local owner = self.Owner
+        local owner = self:GetOwner()
         owner:EmitSound("snd_jack_hmcd_jihad1.wav",75)
         self.alalal = true
 
@@ -73,7 +73,7 @@ if SERVER then
 
             JMod.WreckBuildings(ent, SelfPos, PowerMult)
             JMod.BlastDoors(ent, SelfPos, PowerMult)
-            JMod.FragSplosion(s, SelfPos + Vector(0, 0, 70), 3000, 80, 5000, self.Owner or game.GetWorld())
+            JMod.FragSplosion(s, SelfPos + Vector(0, 0, 70), 3000, 80, 5000, self:GetOwner() or game.GetWorld())
 
             timer.Simple(0,function()
                 local ZaWarudo = game.GetWorld()
@@ -88,7 +88,7 @@ else
     function SWEP:PrimaryAttack() end
 
     function SWEP:DrawWorldModel()
-        local owner = self.Owner
+        local owner = self:GetOwner()
         if not IsValid(owner) then self:DrawModel() return end
 
         local mdl = self.worldModel
@@ -101,7 +101,7 @@ else
         end
         self:CallOnRemove("huyhuy",function() mdl:Remove() end)
 
-        local matrix = self.Owner:GetBoneMatrix(11)
+        local matrix = self:GetOwner():GetBoneMatrix(11)
         if not matrix then return end
 
         mdl:SetRenderOrigin(matrix:GetTranslation()+matrix:GetAngles():Forward()*3+matrix:GetAngles():Right()*3)

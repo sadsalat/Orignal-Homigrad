@@ -40,7 +40,7 @@ function ENT:addRotors()
 	self.rotor:SetModel("models/props_junk/sawblade001a.mdl")
 	self.rotor:SetPos(self:LocalToWorld(self.rotorPos))
 	self.rotor:SetAngles(self:GetAngles() + Angle(90, 0, 0))
-	self.rotor:SetOwner(self.Owner)
+	self.rotor:SetOwner(self:GetOwner())
 	self.rotor:Spawn()
 	self.rotor:SetNotSolid(true)
 	self.rotor.phys = self.rotor:GetPhysicsObject()
@@ -77,7 +77,7 @@ function ENT:addRotors()
 		end
 		
 		e:Spawn()
-		e:SetOwner(self.Owner)
+		e:SetOwner(self:GetOwner())
 		e:SetParent(self.rotor)
 		e.wac_ignore = true
 		local obb=e:OBBMaxs()

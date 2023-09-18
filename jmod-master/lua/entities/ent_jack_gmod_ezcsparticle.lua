@@ -112,7 +112,7 @@ if SERVER then
 								Dmg:SetDamageType(DMG_NERVEGAS)
 								Dmg:SetDamage(math.random(1, 4) * JMod.Config.PoisonGasDamage * RespiratorMultiplier)
 								Dmg:SetInflictor(self)
-								Dmg:SetAttacker(self.Owner or self)
+								Dmg:SetAttacker(self:GetOwner() or self)
 								Dmg:SetDamagePosition(obj:GetPos())
 								obj:TakeDamageInfo(Dmg)
 							end

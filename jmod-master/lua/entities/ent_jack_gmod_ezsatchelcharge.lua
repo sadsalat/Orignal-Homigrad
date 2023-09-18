@@ -24,7 +24,7 @@ if SERVER then
 		plunger:SetAngles(self:GetAngles())
 		plunger:Spawn()
 		plunger.Satchel = self
-		plunger.Owner = self.Owner
+		plunger.Owner = self:GetOwner()
 		self.Plunger = plunger
 
 		timer.Simple(0, function()
@@ -127,7 +127,7 @@ if SERVER then
 
 				timer.Simple(0, function()
 					local ZaWarudo = game.GetWorld()
-					local Infl, Att = (IsValid(self) and self) or ZaWarudo, (IsValid(self) and IsValid(self.Owner) and self.Owner) or (IsValid(self) and self) or ZaWarudo
+					local Infl, Att = (IsValid(self) and self) or ZaWarudo, (IsValid(self) and IsValid(self:GetOwner()) and self:GetOwner()) or (IsValid(self) and self) or ZaWarudo
 					util.BlastDamage(Infl, Att, SelfPos, 100 * PowerMult, 160 * PowerMult)
 					self:Remove()
 				end)

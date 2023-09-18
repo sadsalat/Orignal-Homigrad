@@ -28,7 +28,7 @@ bloodtypes = {
 }
 
 function SWEP:Think()
-	if self.Owner:KeyDown(IN_ATTACK) then
+	if self:GetOwner():KeyDown(IN_ATTACK) then
 		local owner = self:GetOwner()
 		local ent = owner
 		if not ent then
@@ -38,7 +38,7 @@ function SWEP:Think()
 
 		self.bloodinside = self.bloodinside or false
 
-		if self.Owner:KeyPressed(IN_ATTACK) then
+		if self:GetOwner():KeyPressed(IN_ATTACK) then
 			self.zabortime = self.zabortime or CurTime()
 			ent:EmitSound(healsound2)
 			owner:SetAnimation(PLAYER_ATTACK1)
@@ -54,7 +54,7 @@ function SWEP:Think()
 				self:SetSkin(not self.bloodinside and 1 or 0)
 			end
 		end
-	elseif self.Owner:KeyDown(IN_ATTACK2) then
+	elseif self:GetOwner():KeyDown(IN_ATTACK2) then
 		local owner = self:GetOwner()
 		local ent = owner:GetEyeTraceDis(75).Entity
 		ent = (ent:IsPlayer() and ent) or (RagdollOwner(ent)) or ((ent.Blood or 0) > 500 and ent)
@@ -63,7 +63,7 @@ function SWEP:Think()
 			return
 		end
 
-		if self.Owner:KeyPressed(IN_ATTACK2) then
+		if self:GetOwner():KeyPressed(IN_ATTACK2) then
 			self.zabortime = self.zabortime or CurTime()
 			ent:EmitSound(healsound2)
 			owner:SetAnimation(PLAYER_ATTACK1)

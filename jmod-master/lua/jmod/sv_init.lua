@@ -138,7 +138,7 @@ function JMod.FalloutIrradiate(self, obj)
 	end
 
 	---
-	local Dmg, Helf, Att = DamageInfo(), obj:Health(), (IsValid(self.Owner) and self.Owner) or self
+	local Dmg, Helf, Att = DamageInfo(), obj:Health(), (IsValid(self:GetOwner()) and self:GetOwner()) or self
 	Dmg:SetDamageType(DMG_RADIATION)
 	Dmg:SetDamage(DmgAmt)
 	Dmg:SetInflictor(self)

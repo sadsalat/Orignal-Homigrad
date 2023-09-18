@@ -17,7 +17,7 @@ function SWEP:Heal(ent)
     end
 
     if ent:Health() < 100 then
-        ent:SetHealth(math.Clamp(self.Owner:Health() + 75,0,100))
+        ent:SetHealth(math.Clamp(self:GetOwner():Health() + 75,0,100))
         usses = true
     end
 

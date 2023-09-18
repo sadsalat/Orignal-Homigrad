@@ -262,7 +262,7 @@ local Downness = 0
 function SWEP:GetViewModelPosition(pos, ang)
 	local FT = FrameTime()
 
-	if (self.Owner:KeyDown(IN_SPEED)) or (self.Owner:KeyDown(IN_ZOOM)) then
+	if (self:GetOwner():KeyDown(IN_SPEED)) or (self:GetOwner():KeyDown(IN_ZOOM)) then
 		Downness = Lerp(FT * 2, Downness, 10)
 	else
 		Downness = Lerp(FT * 2, Downness, 0)
@@ -282,21 +282,21 @@ function SWEP:SetupDataTables()
 end
 
 function SWEP:UpdateNextIdle()
-	local vm = self.Owner:GetViewModel()
+	local vm = self:GetOwner():GetViewModel()
 	self.NextIdle = CurTime() + vm:SequenceDuration()
 end
 
 function SWEP:FindNailPos()
-	local Pos, Vec = self.Owner:GetShootPos(), self.Owner:GetAimVector()
+	local Pos, Vec = self:GetOwner():GetShootPos(), self:GetOwner():GetAimVector()
 
-	local Tr1 = util.QuickTrace(Pos, Vec * 80, {self.Owner})
+	local Tr1 = util.QuickTrace(Pos, Vec * 80, {self:GetOwner()})
 
 	if Tr1.Hit then
 		local Ent1 = Tr1.Entity
 		if Tr1.HitSky or Ent1:IsWorld() or Ent1:IsPlayer() or Ent1:IsNPC() then return nil end
 		if not IsValid(Ent1:GetPhysicsObject()) then return nil end
 
-		local Tr2 = util.QuickTrace(Pos, Vec * 120, {self.Owner, Ent1})
+		local Tr2 = util.QuickTrace(Pos, Vec * 120, {self:GetOwner(), Ent1})
 
 		if Tr2.Hit then
 			local Ent2 = Tr2.Entity
@@ -341,7 +341,7 @@ function SWEP:Nail()
 end
 
 function SWEP:GetPackagableObject()
-	local Tr = util.QuickTrace(self.Owner:GetShootPos(), self.Owner:GetAimVector() * 80, {self.Owner})
+	local Tr = util.QuickTrace(self:GetOwner():GetShootPos(), self:GetOwner():GetAimVector() * 80, {self:GetOwner()})
 
 	local Ent = Tr.Entity
 
@@ -401,7 +401,7 @@ function SWEP:Package()
 end
 
 function SWEP:PrimaryAttack()
-	if self.Owner:KeyDown(IN_SPEED) then return end
+	if self:GetOwner():KeyDown(IN_SPEED) then return end
 	self:Pawnch()
 	self:SetNextPrimaryFire(CurTime() + .6)
 	self:SetNextSecondaryFire(CurTime() + 1)
@@ -433,7 +433,7 @@ function SWEP:PrimaryAttack()
 			end
 
 			if JMod.HaveResourcesToPerformTask(nil, nil, Reqs, self) then
-				local override, msg = hook.Run("JMod_CanKitBuild", self.Owner, self, buildInfo)
+				local override, msg = hook.Run("JMod_CanKitBuild", self:GetOwner(), self, buildInfo)
 
 				if override == false then
 					self:Msg(msg or "cannot build")
@@ -466,15 +466,15 @@ function SWEP:PrimaryAttack()
 										local FuncName = StringParts[2]
 
 										if JMod.LuaConfig and JMod.LuaConfig.BuildFuncs and JMod.LuaConfig.BuildFuncs[FuncName] then
-											JMod.LuaConfig.BuildFuncs[FuncName](self.Owner, Pos + Norm * 10 * (buildInfo.sizeScale or 1), Angle(0, self.Owner:EyeAngles().y, 0))
+											JMod.LuaConfig.BuildFuncs[FuncName](self:GetOwner(), Pos + Norm * 10 * (buildInfo.sizeScale or 1), Angle(0, self:GetOwner():EyeAngles().y, 0))
 										else
 											print("JMOD TOOLBOX ERROR: garrysmod/jmod/lua/jmod/sv_config.lua-JMod.LuaConfig is missing, corrupt, or doesn't have an entry for that build function")
 										end
 									else
 										local Ent = ents.Create(Class)
 										Ent:SetPos(Pos + Norm * 10 * (buildInfo.sizeScale or 1))
-										Ent:SetAngles(Angle(0, self.Owner:EyeAngles().y, 0))
-										JMod.SetOwner(Ent, self.Owner)
+										Ent:SetAngles(Angle(0, self:GetOwner():EyeAngles().y, 0))
+										JMod.SetOwner(Ent, self:GetOwner())
 										Ent:Spawn()
 										Ent:Activate()
 										self:SetElectricity(math.Clamp(self:GetElectricity() - 8 * (buildInfo.sizeScale or 1), 0, self.EZmaxElectricity))
@@ -494,7 +494,7 @@ function SWEP:PrimaryAttack()
 			if not Built then
 				self:Msg("missing supplies for build")
 			end
-		elseif IsValid(Ent) and Ent.ModPerfSpecs and self.Owner:KeyDown(JMod.Config.AltFunctionKey) then
+		elseif IsValid(Ent) and Ent.ModPerfSpecs and self:GetOwner():KeyDown(JMod.Config.AltFunctionKey) then
 			local State = Ent:GetState()
 
 			local PartsDonated = 0
@@ -525,7 +525,7 @@ function SWEP:PrimaryAttack()
 					net.WriteBit(false)
 				end
 
-				net.Send(self.Owner)
+				net.Send(self:GetOwner())
 			else
 				self:Msg("needs 20 Parts nearby to perform modification")
 			end
@@ -548,7 +548,7 @@ function SWEP:PrimaryAttack()
 						local CurAmt = Ent.UpgradeProgress[resourceType] or 0
 
 						if CurAmt < requiredAmt then
-							local ResourceContainer = JMod.FindResourceContainer(resourceType, UpgradeRate, nil, nil, self.Owner)
+							local ResourceContainer = JMod.FindResourceContainer(resourceType, UpgradeRate, nil, nil, self:GetOwner())
 
 							if ResourceContainer then
 								self:UpgradeEntWithResource(Ent, ResourceContainer, UpgradeRate)
@@ -615,7 +615,7 @@ function SWEP:ModifyMachine(ent, tbl, ammoType)
 end
 
 function SWEP:Msg(msg)
-	self.Owner:PrintMessage(HUD_PRINTCENTER, msg)
+	self:GetOwner():PrintMessage(HUD_PRINTCENTER, msg)
 end
 
 function SWEP:UpgradeEntWithResource(recipient, donor, amt)
@@ -664,8 +664,8 @@ end
 local Anims = {"fists_right", "fists_right", "fists_left", "fists_left"}
 
 function SWEP:Pawnch()
-	self.Owner:SetAnimation(PLAYER_ATTACK1)
-	local vm = self.Owner:GetViewModel()
+	self:GetOwner():SetAnimation(PLAYER_ATTACK1)
+	local vm = self:GetOwner():GetViewModel()
 	vm:SendViewModelMatchingSequence(vm:LookupSequence(table.Random(Anims)))
 	self:UpdateNextIdle()
 end
@@ -698,15 +698,15 @@ function SWEP:Reload()
 	if SERVER then
 		local Time = CurTime()
 
-		if self.Owner:KeyDown(JMod.Config.AltFunctionKey) then
+		if self:GetOwner():KeyDown(JMod.Config.AltFunctionKey) then
 		else -- do nothing
 			if self.NextSwitch < Time then
 				self.NextSwitch = Time + .5
-				JMod.Hint(self.Owner, "craft")
+				JMod.Hint(self:GetOwner(), "craft")
 				net.Start("JMod_EZtoolbox")
 				net.WriteTable(self.Craftables)
 				net.WriteEntity(self)
-				net.Send(self.Owner)
+				net.Send(self:GetOwner())
 			end
 		end
 	end
@@ -740,13 +740,13 @@ function SWEP:UpgradeEffect(pos, scale, suppressSound)
 end
 
 function SWEP:WhomIlookinAt()
-	local Filter = {self.Owner}
+	local Filter = {self:GetOwner()}
 
 	for k, v in pairs(ents.FindByClass("npc_bullseye")) do
 		table.insert(Filter, v)
 	end
 
-	local Tr = util.QuickTrace(self.Owner:GetShootPos(), self.Owner:GetAimVector() * 80, Filter)
+	local Tr = util.QuickTrace(self:GetOwner():GetShootPos(), self:GetOwner():GetAimVector() * 80, Filter)
 
 	return Tr.Entity, Tr.HitPos, Tr.HitNormal
 end
@@ -778,8 +778,8 @@ end
 function SWEP:OnRemove()
 	self:SCKHolster()
 
-	if IsValid(self.Owner) and CLIENT and self.Owner:IsPlayer() then
-		local vm = self.Owner:GetViewModel()
+	if IsValid(self:GetOwner()) and CLIENT and self:GetOwner():IsPlayer() then
+		local vm = self:GetOwner():GetViewModel()
 
 		if IsValid(vm) then
 			vm:SetMaterial("")
@@ -812,8 +812,8 @@ function SWEP:Holster(wep)
 	-- Not calling OnRemove to keep the models
 	self:SCKHolster()
 
-	if IsValid(self.Owner) and CLIENT and self.Owner:IsPlayer() then
-		local vm = self.Owner:GetViewModel()
+	if IsValid(self:GetOwner()) and CLIENT and self:GetOwner():IsPlayer() then
+		local vm = self:GetOwner():GetViewModel()
 
 		if IsValid(vm) then
 			vm:SetMaterial("")
@@ -824,8 +824,8 @@ function SWEP:Holster(wep)
 end
 
 function SWEP:Deploy()
-	if not IsValid(self.Owner) then return end
-	local vm = self.Owner:GetViewModel()
+	if not IsValid(self:GetOwner()) then return end
+	local vm = self:GetOwner():GetViewModel()
 
 	if IsValid(vm) and vm.LookupSequence then
 		vm:SendViewModelMatchingSequence(vm:LookupSequence("fists_draw"))
@@ -834,7 +834,7 @@ function SWEP:Deploy()
 	end
 
 	if SERVER then
-		JMod.Hint(self.Owner, "building")
+		JMod.Hint(self:GetOwner(), "building")
 	end
 
 	self:SetNextPrimaryFire(CurTime() + 1)
@@ -850,7 +850,7 @@ function SWEP:CreateResourceEntity(pos, typ, amt)
 	Ent:Spawn()
 	Ent:Activate()
 	Ent:SetResource(amt or 100)
-	JMod.SetOwner(Ent, self.Owner)
+	JMod.SetOwner(Ent, self:GetOwner())
 	timer.Simple(.1, function()
 		if (IsValid(Ent) and IsValid(Ent:GetPhysicsObject())) then 
 			Ent:GetPhysicsObject():SetVelocity(Vector(0, 0, 0)) --- This is so jank
@@ -860,7 +860,7 @@ end
 
 function SWEP:Think()
 	local Time = CurTime()
-	local vm = self.Owner:GetViewModel()
+	local vm = self:GetOwner():GetViewModel()
 	local idletime = self.NextIdle
 
 	if idletime > 0 and Time > idletime then
@@ -870,18 +870,18 @@ function SWEP:Think()
 
 	local Prog, SetAmt = self:GetTaskProgress(), nil
 
-	if (self.Owner:KeyDown(IN_SPEED)) or (self.Owner:KeyDown(IN_ZOOM)) then
+	if (self:GetOwner():KeyDown(IN_SPEED)) or (self:GetOwner():KeyDown(IN_ZOOM)) then
 		self:SetHoldType("normal")
 	else
 		self:SetHoldType("fist")
 
-		if self.Owner:KeyDown(IN_ATTACK2) then
+		if self:GetOwner():KeyDown(IN_ATTACK2) then
 			if self.NextTaskProgress < Time then
 				self.NextTaskProgress = Time + .6
 				SetAmt = 0
-				local Alt = self.Owner:KeyDown(JMod.Config.AltFunctionKey)
+				local Alt = self:GetOwner():KeyDown(JMod.Config.AltFunctionKey)
 
-				local Tr = util.QuickTrace(self.Owner:GetShootPos(), self.Owner:GetAimVector() * 80, {self.Owner})
+				local Tr = util.QuickTrace(self:GetOwner():GetShootPos(), self:GetOwner():GetAimVector() * 80, {self:GetOwner()})
 
 				local Ent, Pos = Tr.Entity, Tr.HitPos
 
@@ -898,7 +898,7 @@ function SWEP:Think()
 							-- loosen
 							--Prog = JMod.UpdateDeconstruct(Ent)
 							if constraint.HasConstraints(Ent) or not Phys:IsMotionEnabled() then
-								JMod.Hint(self.Owner, "work spread")
+								JMod.Hint(self:GetOwner(), "work spread")
 								local WorkSpreadMult = JMod.CalcWorkSpreadMult(Ent, Pos)
 								local Mass = Phys:GetMass() ^ .8
 								local AddAmt = 300 / Mass * WorkSpreadMult * JMod.Config.ToolboxDeconstructSpeedMult
@@ -936,7 +936,7 @@ function SWEP:Think()
 									if #table.GetKeys(Yield) <= 0 then
 										self:Msg(Msg)
 									else
-										JMod.Hint(self.Owner, "work spread")
+										JMod.Hint(self:GetOwner(), "work spread")
 										local WorkSpreadMult = JMod.CalcWorkSpreadMult(Ent, Pos)
 										local AddAmt = 250 / Mass * WorkSpreadMult * JMod.Config.ToolboxDeconstructSpeedMult
 										SetAmt = math.Clamp(Prog + AddAmt, 0, 100)
@@ -987,7 +987,7 @@ local LastProg = 0
 
 function SWEP:DrawHUD()
 	if GetConVar("cl_drawhud"):GetBool() == false then return end
-	if self.Owner:ShouldDrawLocalPlayer() then return end
+	if self:GetOwner():ShouldDrawLocalPlayer() then return end
 	local W, H, Build = ScrW(), ScrH(), self:GetSelectedBuild()
 	local W, H, Msg = ScrW(), ScrH()
 
@@ -1009,7 +1009,7 @@ function SWEP:DrawHUD()
 	local Prog = self:GetTaskProgress()
 
 	if Prog > 0 then
-		draw.SimpleTextOutlined((self.Owner:KeyDown(JMod.Config.AltFunctionKey) and "Loosening...") or "Salvaging...", "Trebuchet24", W * .5, H * .45, Color(255, 255, 255, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 3, Color(0, 0, 0, 50))
+		draw.SimpleTextOutlined((self:GetOwner():KeyDown(JMod.Config.AltFunctionKey) and "Loosening...") or "Salvaging...", "Trebuchet24", W * .5, H * .45, Color(255, 255, 255, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 3, Color(0, 0, 0, 50))
 		draw.RoundedBox(10, W * .3, H * .5, W * .4, H * .05, Color(0, 0, 0, 100))
 		draw.RoundedBox(10, W * .3 + 5, H * .5 + 5, W * .4 * LastProg / 100 - 10, H * .05 - 10, Color(255, 255, 255, 100))
 	end
@@ -1019,8 +1019,8 @@ end
 
 ----------------- sck -------------------
 function SWEP:SCKHolster()
-	if CLIENT and IsValid(self.Owner) then
-		local vm = self.Owner:GetViewModel()
+	if CLIENT and IsValid(self:GetOwner()) then
+		local vm = self:GetOwner():GetViewModel()
 
 		if IsValid(vm) then
 			self:ResetBonePositions(vm)
@@ -1038,8 +1038,8 @@ function SWEP:SCKInitialize()
 		self:CreateModels(self.WElements) -- create worldmodels
 
 		-- init view model bone build function
-		if IsValid(self.Owner) then
-			local vm = self.Owner:GetViewModel()
+		if IsValid(self:GetOwner()) then
+			local vm = self:GetOwner():GetViewModel()
 
 			if IsValid(vm) then
 				self:ResetBonePositions(vm)
@@ -1065,7 +1065,7 @@ if CLIENT then
 	SWEP.vRenderOrder = nil
 
 	function SWEP:SCKViewModelDrawn()
-		local vm = self.Owner:GetViewModel()
+		local vm = self:GetOwner():GetViewModel()
 		if not IsValid(vm) then return end
 		if not self.VElements then return end
 		self:UpdateBonePositions(vm)
@@ -1177,8 +1177,8 @@ if CLIENT then
 			end
 		end
 
-		if IsValid(self.Owner) then
-			bone_ent = self.Owner
+		if IsValid(self:GetOwner()) then
+			bone_ent = self:GetOwner()
 		else
 			-- when the weapon is dropped
 			bone_ent = self
@@ -1287,7 +1287,7 @@ if CLIENT then
 				pos, ang = m:GetTranslation(), m:GetAngles()
 			end
 
-			if IsValid(self.Owner) and self.Owner:IsPlayer() and ent == self.Owner:GetViewModel() and self.ViewModelFlip then
+			if IsValid(self:GetOwner()) and self:GetOwner():IsPlayer() and ent == self:GetOwner():GetViewModel() and self.ViewModelFlip then
 				ang.r = -ang.r -- Fixes mirrored models
 			end
 		end

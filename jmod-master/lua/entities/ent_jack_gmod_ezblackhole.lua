@@ -117,7 +117,7 @@ function ENT:Rape(ent)
 		Dmg:SetDamagePosition(SelfPos)
 		Dmg:SetDamageForce((SelfPos - ent:GetPos()) * 10)
 		Dmg:SetInflictor(self)
-		Dmg:SetAttacker((IsValid(self.Owner) and self.Owner) or self)
+		Dmg:SetAttacker((IsValid(self:GetOwner()) and self:GetOwner()) or self)
 		ent:TakeDamageInfo(Dmg)
 
 		timer.Simple(0, function()
@@ -194,7 +194,7 @@ if SERVER then
 		Dmg:SetDamage(power / 10)
 		Dmg:SetDamageType(DMG_RADIATION)
 		Dmg:SetInflictor(self)
-		Dmg:SetAttacker((IsValid(self.Owner) and self.Owner) or self)
+		Dmg:SetAttacker((IsValid(self:GetOwner()) and self:GetOwner()) or self)
 		util.BlastDamageInfo(Dmg, self:GetPos(), 10000)
 	end
 

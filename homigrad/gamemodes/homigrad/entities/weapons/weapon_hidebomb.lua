@@ -139,7 +139,7 @@ if SERVER then
     --local cyka = {}
 
     function SWEP:PrimaryAttack()
-        local owner = self.Owner
+        local owner = self:GetOwner()
         if IsValid(owner.bomb) then return end
 
         local tr = {}
@@ -161,29 +161,29 @@ if SERVER then
             ent:Spawn()
         end
 
-        self.Owner.gg = true
+        self:GetOwner().gg = true
 
         owner = ent
-        self.Owner.bomb = owner
+        self:GetOwner().bomb = owner
         ent.parentBomb = self
-        ent.owner = self.Owner
+        ent.owner = self:GetOwner()
         ent:CallOnRemove("homigrad-bomb",Bomb)
         ent:EmitSound("buttons/button24.wav",75,50)
         self:SetNWBool("hasbomb",true)
     end
 
     function SWEP:SecondaryAttack()
-        --local bomb = cyka[self.Owner]
-        if not IsValid(self.Owner.bomb) then return end
+        --local bomb = cyka[self:GetOwner()]
+        if not IsValid(self:GetOwner().bomb) then return end
 
-        Bomb(self.Owner.bomb)
-        self.Owner.bomb = nil
+        Bomb(self:GetOwner().bomb)
+        self:GetOwner().bomb = nil
         self:Remove()
-        --cyka[self.Owner] = nil
+        --cyka[self:GetOwner()] = nil
     end
 else
     function SWEP:DrawWorldModel()
-        local owner = self.Owner
+        local owner = self:GetOwner()
 
         if not IsValid(owner) then self:DrawModel() return end
         --if self:GetNWBool("hasbomb") then return end
@@ -195,7 +195,7 @@ else
             self.mdl:SetModelScale(0.5)
         end
         self:CallOnRemove("huyhuy",function() self.mdl:Remove() end)
-        local matrix = self.Owner:GetBoneMatrix(11)
+        local matrix = self:GetOwner():GetBoneMatrix(11)
         if not matrix then return end
 
         self.mdl:SetRenderOrigin(matrix:GetTranslation()+matrix:GetAngles():Forward()*3+matrix:GetAngles():Right()*3)
@@ -203,7 +203,7 @@ else
         self.mdl:DrawModel()
     end
     function SWEP:DrawHUD()
-        local owner = self.Owner
+        local owner = self:GetOwner()
         local tr = {}
         tr.start = owner:GetAttachment(owner:LookupAttachment("eyes")).Pos
         local dir = Vector(1,0,0)

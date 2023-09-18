@@ -176,7 +176,7 @@ if(SERVER)then
 					if (math.random(1, 3) == 1) then
 						local Gas = ents.Create("ent_jack_gmod_ezgasparticle")
 						Gas:SetPos(self:GetPos() + Vector(0, 0, 100))
-						JMod.SetOwner(Gas, self.Owner)
+						JMod.SetOwner(Gas, self:GetOwner())
 						Gas:SetDTBool(0, true)
 						Gas:Spawn()
 						Gas:Activate()

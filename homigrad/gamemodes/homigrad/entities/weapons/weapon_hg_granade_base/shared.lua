@@ -47,9 +47,9 @@ end
 
 function SWEP:PrimaryAttack()
     if SERVER then    
-        TrownGranade(self.Owner,750,self.Granade)
+        TrownGranade(self:GetOwner(),750,self.Granade)
         self:Remove()
-        self.Owner:SelectWeapon("weapon_hands")
+        self:GetOwner():SelectWeapon("weapon_hands")
     elseif CLIENT then
     end
     self:GetOwner():SetAnimation(PLAYER_ATTACK1)
@@ -58,9 +58,9 @@ end
 
 function SWEP:SecondaryAttack()
     if SERVER then
-        TrownGranade(self.Owner,250,self.Granade)
+        TrownGranade(self:GetOwner(),250,self.Granade)
         self:Remove()
-        self.Owner:SelectWeapon("weapon_hands")
+        self:GetOwner():SelectWeapon("weapon_hands")
     elseif CLIENT then
     end
     self:GetOwner():SetAnimation(PLAYER_ATTACK1)

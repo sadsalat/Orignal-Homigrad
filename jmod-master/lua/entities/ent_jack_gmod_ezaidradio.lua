@@ -58,7 +58,7 @@ if(SERVER)then
 			local State = self:GetState()
 
 			if State == STATE_BROKEN then
-				JMod.Hint(self.Owner, "destroyed")
+				JMod.Hint(self:GetOwner(), "destroyed")
 
 				return
 			end
@@ -81,7 +81,7 @@ if(SERVER)then
 					self:TurnOn(activator)
 					JMod.Hint(activator, "aid help")
 				else
-					JMod.Hint(self.Owner, "nopower")
+					JMod.Hint(self:GetOwner(), "nopower")
 				end
 			end
 		end
@@ -138,12 +138,12 @@ if(SERVER)then
 	end
 
 	function ENT:TurnOn(activator)
-		local OldOwner = self.Owner
+		local OldOwner = self:GetOwner()
 		JMod.SetOwner(self, activator)
 
-		if IsValid(self.Owner) then
+		if IsValid(self:GetOwner()) then
 			-- if owner changed then reset team color
-			if OldOwner ~= self.Owner then
+			if OldOwner ~= self:GetOwner() then
 				JMod.Colorify(self)
 			end
 		end
@@ -187,9 +187,9 @@ if(SERVER)then
 
 				if self:TryFindSky() then
 					self:Speak("Broadcast received, establishing comm line...")
-					self:Connect(self.Owner)
+					self:Connect(self:GetOwner())
 				else
-					JMod.Hint(self.Owner, "aid sky")
+					JMod.Hint(self:GetOwner(), "aid sky")
 					self.ConnectionAttempts = self.ConnectionAttempts + 1
 
 					if self.ConnectionAttempts > 5 then
@@ -267,15 +267,15 @@ if(SERVER)then
 	function ENT:UserIsAuthorized(ply)
 		if not ply then return false end
 		if not ply:IsPlayer() then return false end
-		if self.Owner and (ply == self.Owner) then return true end
-		local Allies = (self.Owner and self.Owner.JModFriends) or {}
+		if self:GetOwner() and (ply == self:GetOwner()) then return true end
+		local Allies = (self:GetOwner() and self:GetOwner().JModFriends) or {}
 		if table.HasValue(Allies, ply) then return true end
 
 		if not (engine.ActiveGamemode() == "sandbox" and ply:Team() == TEAM_UNASSIGNED) then
 			local OurTeam = nil
 
-			if IsValid(self.Owner) then
-				OurTeam = self.Owner:Team()
+			if IsValid(self:GetOwner()) then
+				OurTeam = self:GetOwner():Team()
 			end
 
 			return (OurTeam and ply:Team() == OurTeam) or false
@@ -289,7 +289,7 @@ if(SERVER)then
 		if State < 2 then return end
 
 		if not self:TryFindSky() then
-			JMod.Hint(self.Owner, "aid sky")
+			JMod.Hint(self:GetOwner(), "aid sky")
 			self:Speak("Can not establish connection to any outpost. Shutting down.")
 
 			timer.Simple(1, function()
@@ -345,7 +345,7 @@ if(SERVER)then
 						end
 					end)
 
-					JMod.Hint(self.Owner, "aid package")
+					JMod.Hint(self:GetOwner(), "aid package")
 
 					return true
 				end

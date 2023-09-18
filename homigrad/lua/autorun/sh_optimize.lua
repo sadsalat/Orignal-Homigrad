@@ -13,7 +13,7 @@ function meta:__index(key)
 		if val ~= nil then return val end
 	end
 
-	-- Legacy: sometimes use self.Owner to get the owner.. so lets carry on supporting that stupidness
+	-- Legacy: sometimes use self:GetOwner() to get the owner.. so lets carry on supporting that stupidness
 	-- This needs to be retired, just like self.Entity was.
 	if key == "Owner" then return GetOwner(self) end
 end
@@ -40,7 +40,7 @@ function meta:__index(key)
 		if val ~= nil then return val end
 	end
 
-	-- Legacy: sometimes use self.Owner to get the owner.. so lets carry on supporting that stupidness
+	-- Legacy: sometimes use self:GetOwner() to get the owner.. so lets carry on supporting that stupidness
 	-- This needs to be retired, just like self.Entity was.
 
 	if key == "Owner" then return GetOwner(self) end

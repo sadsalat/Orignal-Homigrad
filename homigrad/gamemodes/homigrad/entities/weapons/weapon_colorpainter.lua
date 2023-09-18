@@ -50,7 +50,7 @@ if SERVER then
 end
 
 function SWEP:DrawWorldModel()
-    local owner = self.Owner
+    local owner = self:GetOwner()
     if not IsValid(owner) then self:DrawModel() return end
 
     local mdl = self.worldModel
@@ -63,7 +63,7 @@ function SWEP:DrawWorldModel()
     end
     self:CallOnRemove("huyhuy",function() mdl:Remove() end)
 
-    local matrix = self.Owner:GetBoneMatrix(11)
+    local matrix = self:GetOwner():GetBoneMatrix(11)
     if not matrix then return end
 
     mdl:SetRenderOrigin(matrix:GetTranslation())

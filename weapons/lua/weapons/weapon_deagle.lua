@@ -74,7 +74,7 @@ local function rolldrum(ply,wpn)
 end
 
 function SWEP:RollDrum()
-    rolldrum(self.Owner,self)
+    rolldrum(self:GetOwner(),self)
 end
 
 concommand.Add("hg_rolldrum",rolldrum)
@@ -105,7 +105,7 @@ if SERVER then
     function SWEP:Deploy()
         self:SetHoldType("normal")
         
-        self.Owner:EmitSound("snd_jack_hmcd_pistoldraw.wav", 65, 100, 1, CHAN_AUTO)
+        self:GetOwner():EmitSound("snd_jack_hmcd_pistoldraw.wav", 65, 100, 1, CHAN_AUTO)
     
         self.NextShot = CurTime() + 0.5
     
@@ -116,7 +116,7 @@ if SERVER then
         net.Start("real_bul")
         net.WriteEntity(self)
         net.WriteInt(self.tries,4)
-        net.Send(self.Owner)
+        net.Send(self:GetOwner())
     end
 else
     function SWEP:Deploy()
@@ -137,7 +137,7 @@ function SWEP:CanFireBullet()
 
     self.tries = self.tries or 1--math.ceil(util.SharedRandom("huy"..tostring(CurTime()),1,math.max(6 - self:Clip1(),1)))
     self.tries = self.tries - 1
-    --self.Owner:ChatPrint(tostring(self.tries)..(CLIENT and " client" or " server"))
+    --self:GetOwner():ChatPrint(tostring(self.tries)..(CLIENT and " client" or " server"))
 
     return (self.tries <= 0)
 end

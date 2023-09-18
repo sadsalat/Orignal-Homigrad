@@ -166,7 +166,7 @@ if SERVER then
 	function ENT:Detonate()
 		if self.Exploded then return end
 		self.Exploded = true
-		local SelfPos, Att = self:GetPos() + Vector(0, 0, 30), self.Owner or game.GetWorld()
+		local SelfPos, Att = self:GetPos() + Vector(0, 0, 30), self:GetOwner() or game.GetWorld()
 		JMod.Sploom(Att, SelfPos, 100)
 		---
 		util.ScreenShake(SelfPos, 1000, 3, 2, 2000)
@@ -207,7 +207,7 @@ if SERVER then
 		end)
 
 		---
-		JMod.FragSplosion(self, SelfPos, 10000, 200, 8000, self.Owner or game.GetWorld())
+		JMod.FragSplosion(self, SelfPos, 10000, 200, 8000, self:GetOwner() or game.GetWorld())
 		---
 		self:Remove()
 

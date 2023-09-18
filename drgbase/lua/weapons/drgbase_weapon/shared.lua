@@ -51,11 +51,11 @@ if CLIENT then
 
 	function SWEP:CalcViewModelView(vm, oldpos, oldang, pos, ang)
 		local aimpos = pos +
-		self.Owner:GetForward()*self.ViewModelOffset.x +
-		self.Owner:GetUp()*self.ViewModelOffset.z
+		self:GetOwner():GetForward()*self.ViewModelOffset.x +
+		self:GetOwner():GetUp()*self.ViewModelOffset.z
 		if self.ViewModelFlip then
-			aimpos = aimpos - self.Owner:GetRight()*self.ViewModelOffset.y
-		else aimpos = aimpos + self.Owner:GetRight()*self.ViewModelOffset.y end
+			aimpos = aimpos - self:GetOwner():GetRight()*self.ViewModelOffset.y
+		else aimpos = aimpos + self:GetOwner():GetRight()*self.ViewModelOffset.y end
 		local aimang = ang + self.ViewModelAngle
 		return aimpos, aimang
 	end

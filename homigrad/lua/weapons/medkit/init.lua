@@ -7,7 +7,7 @@ function SWEP:PrimaryAttack()
 	self:SetNextSecondaryFire(CurTime() + self.Dealy)
 
 	local owner = self:GetOwner()
-	if self:Heal(owner) then owner:SetAnimation(PLAYER_ATTACK1) self:Remove() self.Owner:SelectWeapon("weapon_hands") end
+	if self:Heal(owner) then owner:SetAnimation(PLAYER_ATTACK1) self:Remove() self:GetOwner():SelectWeapon("weapon_hands") end
 end
 
 function SWEP:SecondaryAttack()
@@ -33,7 +33,7 @@ function SWEP:SecondaryAttack()
 		end
 		owner:SetAnimation(PLAYER_ATTACK1)
 		self:Remove()
-		self.Owner:SelectWeapon("weapon_hands")
+		self:GetOwner():SelectWeapon("weapon_hands")
 	end
 end
 
@@ -58,7 +58,7 @@ function SWEP:Heal(ent)
 	end
 
 	if ent:Health() < 150 then
-		ent:SetHealth(math.Clamp(self.Owner:Health() + 10,0,150))
+		ent:SetHealth(math.Clamp(self:GetOwner():Health() + 10,0,150))
 		ent.hungryregen = ent.hungryregen + 6
 		sound.Play(healsound,ent:GetPos(),75,100,0.5)
 

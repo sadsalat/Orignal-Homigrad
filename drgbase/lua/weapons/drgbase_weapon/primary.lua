@@ -21,7 +21,7 @@ function SWEP:CanPrimaryAttack()
 	if self:GetPrimaryAmmoType() < 0 then return true end
 	if self.Primary.ClipSize > 0 then
 		return self.Weapon:Clip1() >= self.Primary.Cost
-	else return self.Owner:GetAmmoCount(self.Primary.Ammo) >= self.Primary.Cost end
+	else return self:GetOwner():GetAmmoCount(self.Primary.Ammo) >= self.Primary.Cost end
 end
 function SWEP:TriedToPrimaryAttack()
 	self:EmitSound(self.Primary.EmptySound)
@@ -39,11 +39,11 @@ function SWEP:PrimaryAttack()
 	self:EmitSound(self.Primary.Sound)
 	if SERVER then
 		self:TakePrimaryAmmo(self.Primary.Cost)
-		if self.Owner:IsPlayer() then
-			local eyeangles = self.Owner:EyeAngles()
+		if self:GetOwner():IsPlayer() then
+			local eyeangles = self:GetOwner():EyeAngles()
 			eyeangles.p = eyeangles.p - self.Primary.Recoil
-			self.Owner:SetEyeAngles(eyeangles)
-			self.Owner:ViewPunch(Angle(-self.Primary.Recoil/3, 0, 0))
+			self:GetOwner():SetEyeAngles(eyeangles)
+			self:GetOwner():ViewPunch(Angle(-self.Primary.Recoil/3, 0, 0))
 		end
 	end
 	if IsFirstTimePredicted() then

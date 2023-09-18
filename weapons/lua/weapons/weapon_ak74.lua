@@ -56,7 +56,7 @@ function SWEP:PrimaryAttack()
 
 	if timer.Exists("reload"..self:EntIndex()) then return nil end
 	if self:Clip1()<=0 then return nil end
-	if self.Owner:IsSprinting() then return nil end
+	if self:GetOwner():IsSprinting() then return nil end
 	local ply = self:GetOwner()
 	self.NextShot = CurTime() + self.ShootWait
 	self:EmitSound(self.Primary.Sound)

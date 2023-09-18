@@ -90,15 +90,15 @@ if SERVER then
 		local SelfPos = self:GetPos()
 
 		if IsValid(self.AttachedBomb) then
-			JMod.SetOwner(self.AttachedBomb, self.Owner or self.AttachedBomb.Owner or game.GetWorld())
+			JMod.SetOwner(self.AttachedBomb, self:GetOwner() or self.AttachedBomb.Owner or game.GetWorld())
 			self.AttachedBomb:EZdetonateOverride(self)
-			JMod.Sploom(self.Owner, SelfPos, 3)
+			JMod.Sploom(self:GetOwner(), SelfPos, 3)
 			self:Remove()
 
 			return
 		end
 
-		JMod.Sploom(self.Owner, SelfPos, self.MiniNadeDamage, self.MiniNadeDamageMax)
+		JMod.Sploom(self:GetOwner(), SelfPos, self.MiniNadeDamage, self.MiniNadeDamageMax)
 		util.ScreenShake(SelfPos, 20, 20, 1, 500)
 		self:Remove()
 	end

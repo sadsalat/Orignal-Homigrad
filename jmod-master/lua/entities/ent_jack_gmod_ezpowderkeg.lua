@@ -124,10 +124,10 @@ if SERVER then
 		util.Effect("eff_jack_powdersplode", Blam, true, true)
 		util.ScreenShake(SelfPos, 20, 20, 1, 700)
 		-- black powder is not HE and its explosion lacks brisance, more of a push than a shock
-		JMod.Sploom(self.Owner or game.GetWorld(), SelfPos, 150)
+		JMod.Sploom(self:GetOwner() or game.GetWorld(), SelfPos, 150)
 		local Dmg = DamageInfo()
 		Dmg:SetDamage(70)
-		Dmg:SetAttacker(self.Owner or self)
+		Dmg:SetAttacker(self:GetOwner() or self)
 		Dmg:SetInflictor(self)
 		Dmg:SetDamageType(DMG_BURN)
 		util.BlastDamageInfo(Dmg, SelfPos, 750)
@@ -174,11 +174,11 @@ if SERVER then
 			if Tr.Hit then
 				local Powder = ents.Create("ent_jack_gmod_ezblackpowderpile")
 				Powder:SetPos(Tr.HitPos + Tr.HitNormal * .1)
-				JMod.SetOwner(Powder, self.Owner)
+				JMod.SetOwner(Powder, self:GetOwner())
 				Powder:Spawn()
 				Powder:Activate()
 				constraint.Weld(Powder, Tr.Entity, 0, 0, 0, true)
-				JMod.Hint(self.Owner, "powder", Powder)
+				JMod.Hint(self:GetOwner(), "powder", Powder)
 			end
 
 			self.Powder = self.Powder - 1

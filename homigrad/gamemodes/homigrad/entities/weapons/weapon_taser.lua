@@ -44,7 +44,7 @@ function SWEP:PrimaryAttack()
 	if self:Clip1() <= 0 then return nil end
 	self:TakePrimaryAmmo(1)
 
-	local ply = self.Owner
+	local ply = self:GetOwner()
 	local att = self:GetAttachment(1)
 	
 	ply:EmitSound("ambient/energy/zap3.wav")
@@ -80,15 +80,15 @@ end
 
 function SWEP:Reload()
 if timer.Exists("reload"..self:EntIndex()) or self:Clip1()>=self:GetMaxClip1() or self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() )<=0 then return nil end
-	if self.Owner:IsSprinting() then return nil end
+	if self:GetOwner():IsSprinting() then return nil end
 	self:GetOwner():SetAnimation(PLAYER_RELOAD)
 	--self:EmitSound(self.ReloadSound,60,100,0.8,CHAN_AUTO)
 	timer.Create( "reload"..self:EntIndex(), 1.5, 1, function()
-		if IsValid(self) and IsValid(self.Owner) and self.Owner:GetActiveWeapon()==self then
+		if IsValid(self) and IsValid(self:GetOwner()) and self:GetOwner():GetActiveWeapon()==self then
 			local oldclip = self:Clip1()
 			self:SetClip1(math.Clamp(self:Clip1()+self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() ),0,self:GetMaxClip1()))
 			local needed = self:Clip1()-oldclip
-			self.Owner:SetAmmo(self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() )-needed, self:GetPrimaryAmmoType())
+			self:GetOwner():SetAmmo(self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() )-needed, self:GetPrimaryAmmoType())
 		end
 	end)
 end

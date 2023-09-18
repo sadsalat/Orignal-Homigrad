@@ -50,7 +50,7 @@ end
 function SWEP:PrimaryAttack()
     if CLIENT then return end
 
-    local ent = eyeTrace(self.Owner).Entity
+    local ent = eyeTrace(self:GetOwner()).Entity
 
     if not IsValid(ent) or ent:IsWorld() or ent:IsPlayer() then return end
 
@@ -63,9 +63,9 @@ if SERVER then
 
     function SWEP:Poison(ent)
         ent.poisoned = true
-        self.Owner:EmitSound("snd_jack_hmcd_needleprick.wav",30)
+        self:GetOwner():EmitSound("snd_jack_hmcd_needleprick.wav",30)
         self:Remove()
-        self.Owner:SelectWeapon("weapon_hands")
+        self:GetOwner():SelectWeapon("weapon_hands")
         
         return false
     end
@@ -103,7 +103,7 @@ if SERVER then
 else
 
     function SWEP:DrawHUD()
-        local owner = self.Owner
+        local owner = self:GetOwner()
         local traceResult = eyeTrace(owner)
         local ent = traceResult.Entity
 

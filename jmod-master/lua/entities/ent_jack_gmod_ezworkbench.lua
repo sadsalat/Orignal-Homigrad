@@ -36,7 +36,7 @@ if(SERVER)then
 		end
 		---
 		--self:SetGas(self.MaxGas)
-		if not(self.Owner)then self:SetColor(Color(153, 47, 45, 255)) end
+		if not(self:GetOwner())then self:SetColor(Color(153, 47, 45, 255)) end
 		self:UpdateConfig()
 	end
 	function ENT:UpdateConfig()

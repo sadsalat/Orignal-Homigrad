@@ -62,7 +62,7 @@ function ENT:Explode(tr)
 
 	local pos = tr and tr.HitPos or self.OldPos
 
-	util.BlastDamage(self, self.Owner or self, pos, self.Radius, self.Damage)
+	util.BlastDamage(self, self:GetOwner() or self, pos, self.Radius, self.Damage)
 
 	local explode = ents.Create("env_physexplosion")
 	explode:SetPos(pos)
@@ -122,7 +122,7 @@ end
 
 function ENT:StartRocket()
 	if self.Started then return end	
-	self.Owner = self.Owner or self.Entity
+	self:GetOwner() = self:GetOwner() or self.Entity
 	self.Fuel=self.Fuel or 1000
 	self.Started = true
 	local pos = self:GetPos()
@@ -170,7 +170,7 @@ function ENT:PhysicsUpdate(ph)
 	local trd = {
 		start = self.OldPos,
 		endpos = self:GetPos(),
-		filter = {self,self.Owner,self.Launcher},
+		filter = {self,self:GetOwner(),self.Launcher},
 		mask = CONTENTS_SOLID + CONTENTS_MOVEABLE + CONTENTS_OPAQUE + CONTENTS_DEBRIS + CONTENTS_HITBOX + CONTENTS_MONSTER + CONTENTS_WINDOW + CONTENTS_WATER,
 	}
 

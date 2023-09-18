@@ -81,11 +81,11 @@ if(SERVER)then
 
 	function ENT:Use(activator)
 		local State = self:GetState()
-		local OldOwner = self.Owner
+		local OldOwner = self:GetOwner()
 		local Alt = activator:KeyDown(JMod.Config.AltFunctionKey)
 		JMod.SetOwner(self, activator)
-		if(IsValid(self.Owner))then
-			if(OldOwner ~= self.Owner)then -- if owner changed then reset team color
+		if(IsValid(self:GetOwner()))then
+			if(OldOwner ~= self:GetOwner())then -- if owner changed then reset team color
 				JMod.Colorify(self)
 			end
 		end
@@ -140,7 +140,7 @@ if(SERVER)then
 
 	function ENT:ResourceLoaded(typ, accepted)
 		if typ == JMod.EZ_RESOURCE_TYPES.OIL and accepted >= 1 then
-			self:TurnOn(self.Owner)
+			self:TurnOn(self:GetOwner())
 		end
 	end
 
@@ -187,7 +187,7 @@ if(SERVER)then
 					for i = 1, 1 do
 						local Gas = ents.Create("ent_jack_gmod_ezgasparticle")
 						Gas:SetPos(self:GetPos() + Vector(0, 0, 100))
-						JMod.SetOwner(Gas, self.Owner)
+						JMod.SetOwner(Gas, self:GetOwner())
 						Gas:SetDTBool(0, true)
 						Gas:Spawn()
 						Gas:Activate()

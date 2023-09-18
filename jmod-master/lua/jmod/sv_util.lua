@@ -681,12 +681,12 @@ end
 
 function JMod.ShouldAllowControl(self, ply)
 	if not IsValid(ply) then return false end
-	if not IsValid(self.Owner) then return false end
-	if ply == self.Owner then return true end
-	local Allies = self.Owner.JModFriends or {}
+	if not IsValid(self:GetOwner()) then return false end
+	if ply == self:GetOwner() then return true end
+	local Allies = self:GetOwner().JModFriends or {}
 	if table.HasValue(Allies, ply) then return true end
 
-	return (engine.ActiveGamemode() ~= "sandbox" or ply:Team() ~= TEAM_UNASSIGNED) and ply:Team() == self.Owner:Team()
+	return (engine.ActiveGamemode() ~= "sandbox" or ply:Team() ~= TEAM_UNASSIGNED) and ply:Team() == self:GetOwner():Team()
 end
 
 function JMod.ShouldAttack(self, ent, vehiclesOnly, peaceWasNeverAnOption)
@@ -707,9 +707,9 @@ function JMod.ShouldAttack(self, ent, vehiclesOnly, peaceWasNeverAnOption)
 		local Class = ent:GetClass()
 		if self.WhitelistedNPCs and table.HasValue(self.WhitelistedNPCs, Class) then return true end
 		if self.BlacklistedNPCs and table.HasValue(self.BlacklistedNPCs, Class) then return false end
-		if not IsValid(self.Owner) then return ent:Health() > 0 end
+		if not IsValid(self:GetOwner()) then return ent:Health() > 0 end
 
-		if ent.Disposition and (ent:Disposition(self.Owner) == D_HT) and ent.GetMaxHealth and ent.Health then
+		if ent.Disposition and (ent:Disposition(self:GetOwner()) == D_HT) and ent.GetMaxHealth and ent.Health then
 			if vehiclesOnly then
 				return ent:GetMaxHealth() > 100 and ent:Health() > 0
 			else
@@ -744,14 +744,14 @@ function JMod.ShouldAttack(self, ent, vehiclesOnly, peaceWasNeverAnOption)
 		if vehiclesOnly and not InVehicle then return false end
 		if PlayerToCheck.EZkillme then return true end -- for testing
 		if PlayerToCheck:GetObserverMode() ~= 0 then return false end
-		if self.Owner and (PlayerToCheck == self.Owner) then return false end
-		local Allies = (self.Owner and self.Owner.JModFriends) or {}
+		if self:GetOwner() and (PlayerToCheck == self:GetOwner()) then return false end
+		local Allies = (self:GetOwner() and self:GetOwner().JModFriends) or {}
 		if table.HasValue(Allies, PlayerToCheck) then return false end
 		local OurTeam = nil
 
-		if IsValid(self.Owner) then
-			OurTeam = self.Owner:Team()
-			if Gaymode == "basewars" and self.Owner.IsAlly then return not self.Owner:IsAlly(PlayerToCheck) end
+		if IsValid(self:GetOwner()) then
+			OurTeam = self:GetOwner():Team()
+			if Gaymode == "basewars" and self:GetOwner().IsAlly then return not self:GetOwner():IsAlly(PlayerToCheck) end
 		end
 
 		if Gaymode == "sandbox" and OurTeam == TEAM_UNASSIGNED then return PlayerToCheck:Alive() end

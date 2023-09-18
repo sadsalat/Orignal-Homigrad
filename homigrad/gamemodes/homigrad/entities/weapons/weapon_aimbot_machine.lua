@@ -238,24 +238,24 @@ else
     end
 
     function SWEP:Deploy()
-        self.owner = self:GetOwner()
+        self:GetOwner() = self:GetOwner()
 
-        self.runSpeed = self.owner:GetRunSpeed()
-        self.walkSpeed = self.owner:GetWalkSpeed()
-        self.maxSpeed = self.owner:GetMaxSpeed()
-        self.owner:SetRunSpeed(500)
-        self.owner:SetWalkSpeed(300)
-        self.owner:SetMaxSpeed(500)
+        self.runSpeed = self:GetOwner():GetRunSpeed()
+        self.walkSpeed = self:GetOwner():GetWalkSpeed()
+        self.maxSpeed = self:GetOwner():GetMaxSpeed()
+        self:GetOwner():SetRunSpeed(500)
+        self:GetOwner():SetWalkSpeed(300)
+        self:GetOwner():SetMaxSpeed(500)
 
         return
     end
 
     function SWEP:Holster()
-        self.owner = self:GetOwner()
+        self:GetOwner() = self:GetOwner()
 
-        self.owner:SetRunSpeed(self.runSpeed)
-        self.owner:SetWalkSpeed(self.walkSpeed)
-        self.owner:SetMaxSpeed(self.maxSpeed)
+        self:GetOwner():SetRunSpeed(self.runSpeed)
+        self:GetOwner():SetWalkSpeed(self.walkSpeed)
+        self:GetOwner():SetMaxSpeed(self.maxSpeed)
 
         return true
     end

@@ -50,7 +50,7 @@ end
 function SWEP:PrimaryAttack()
     if CLIENT then return end
 
-    local ent = eyeTrace(self.Owner).Entity
+    local ent = eyeTrace(self:GetOwner()).Entity
     local ply = ent:IsPlayer() and ent or RagdollOwner(ent)
 
     if not ply then return end
@@ -74,7 +74,7 @@ if SERVER then
 
         if not matrix then return end
 
-        local trace = eyeTrace(self.Owner)
+        local trace = eyeTrace(self:GetOwner())
         local tracePos = trace.HitPos
         local traceDir = trace.HitPos - trace.StartPos
         traceDir:Normalize()
@@ -119,9 +119,9 @@ if SERVER then
                     end
                 end)
             end)
-            self.Owner:EmitSound("snd_jack_hmcd_needleprick.wav",30)
+            self:GetOwner():EmitSound("snd_jack_hmcd_needleprick.wav",30)
             self:Remove()
-            self.Owner:SelectWeapon("weapon_hands")
+            self:GetOwner():SelectWeapon("weapon_hands")
         end
         return false
     end
@@ -134,7 +134,7 @@ if SERVER then
 else
 
     function SWEP:DrawHUD()
-        local owner = self.Owner
+        local owner = self:GetOwner()
         local traceResult = eyeTrace(owner)
         local ent = traceResult.Entity
 
@@ -148,7 +148,7 @@ else
 
         if not matrix then return end
 
-        local trace = eyeTrace(self.Owner)
+        local trace = eyeTrace(self:GetOwner())
         local tracePos = trace.HitPos
         local traceDir = trace.HitPos - trace.StartPos
         traceDir:Normalize()

@@ -110,7 +110,7 @@ else
     function SWEP:DrawWorldModel()
         self:SetWeaponHoldType("normal")
 
-        local owner = self.Owner
+        local owner = self:GetOwner()
         if not IsValid(owner) then self:DrawModel() return end
 
         local mdl = self.worldModel
@@ -123,7 +123,7 @@ else
         end
         self:CallOnRemove("huyhuy",function() mdl:Remove() end)
 
-        local matrix = self.Owner:GetBoneMatrix(11)
+        local matrix = self:GetOwner():GetBoneMatrix(11)
         if not matrix then return end
 
         mdl:SetRenderOrigin(matrix:GetTranslation())

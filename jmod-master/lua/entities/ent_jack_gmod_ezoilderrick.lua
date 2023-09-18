@@ -75,10 +75,10 @@ if(SERVER)then
 	function ENT:Use(activator)
 		local State=self:GetState()
 		JMod.Hint(activator,"oil derrick")
-		local OldOwner=self.Owner
+		local OldOwner=self:GetOwner()
 		JMod.Owner(self,activator)
-		if(IsValid(self.Owner))then
-			if(OldOwner~=self.Owner)then -- if owner changed then reset team color
+		if(IsValid(self:GetOwner()))then
+			if(OldOwner~=self:GetOwner())then -- if owner changed then reset team color
 				JMod.Colorify(self)
 			end
 		end
@@ -122,7 +122,7 @@ if(SERVER)then
 		local Oil=ents.Create("ent_jack_gmod_ezrawresource_oil")
 		Oil:SetPos(SelfPos+Forward*115-Right*90)
 		Oil:Spawn()
-		JMod.Owner(self.Owner)
+		JMod.Owner(self:GetOwner())
 		Oil:Activate()
 	end
 elseif(CLIENT)then

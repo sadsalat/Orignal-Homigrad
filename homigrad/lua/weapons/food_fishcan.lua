@@ -116,13 +116,13 @@ if(CLIENT)then
 end
 
 function SWEP:PrimaryAttack()
-	self.Owner:SetAnimation(PLAYER_ATTACK1)
+	self:GetOwner():SetAnimation(PLAYER_ATTACK1)
 
 	if(SERVER)then
-		self.Owner.hungryregen = self.Owner.hungryregen + 2
+		self:GetOwner().hungryregen = self:GetOwner().hungryregen + 2
 		self:Remove()
 		sound.Play(healsound, self:GetPos(),75,100,0.5)
-		self.Owner:SelectWeapon("weapon_hands")
+		self:GetOwner():SelectWeapon("weapon_hands")
 	end
 end
 

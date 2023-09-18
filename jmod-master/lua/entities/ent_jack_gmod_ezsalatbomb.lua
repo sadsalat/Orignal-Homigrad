@@ -155,7 +155,7 @@ if SERVER then
 	function ENT:Detonate()
 		if self.Exploded then return end
 		self.Exploded = true
-		local SelfPos, Att = self:GetPos() + Vector(0, 0, 30), self.Owner or game.GetWorld()
+		local SelfPos, Att = self:GetPos() + Vector(0, 0, 30), self:GetOwner() or game.GetWorld()
 		JMod.Sploom(Att, SelfPos, 100)
 		---
 		util.ScreenShake(SelfPos, 1000, 3, 2, 1000)
@@ -173,7 +173,7 @@ if SERVER then
 			--local FireAng = (Dir + VectorRand() * .75 + Vector(0, 0, math.Rand(.01, 1.5))):Angle()
 			local Gas = ents.Create("ent_jack_gmod_ezsalatgas")
 			Gas:SetPos(SelfPos)
-			JMod.SetOwner(Gas, self.Owner or self)
+			JMod.SetOwner(Gas, self:GetOwner() or self)
 			Gas:Spawn()
 			Gas:Activate()
 			Gas:GetPhysicsObject():SetVelocity(self:GetPhysicsObject():GetVelocity())

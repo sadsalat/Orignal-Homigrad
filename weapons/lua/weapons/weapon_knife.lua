@@ -110,16 +110,16 @@ end
 function SWEP:DrawHUD()
 		if not (GetViewEntity() == LocalPlayer()) then return end
 		if LocalPlayer():InVehicle() then return end
-			local ply = self.Owner
+			local ply = self:GetOwner()
 			local t = {}
 			t.start = ply:GetAttachment(ply:LookupAttachment("eyes")).Pos
 			t.endpos = t.start + ply:GetAngles():Forward() * 80
-			t.filter = self.Owner
+			t.filter = self:GetOwner()
 			local Tr = util.TraceLine(t)
 
 			if Tr.Hit then
 
-		local Size = math.Clamp(1 - ((Tr.HitPos - self.Owner:GetShootPos()):Length() / 80) ^ 2, .1, .3)
+		local Size = math.Clamp(1 - ((Tr.HitPos - self:GetOwner():GetShootPos()):Length() / 80) ^ 2, .1, .3)
 		surface.SetDrawColor(Color(200, 200, 200, 200))
 		draw.NoTexture()
 		Circle(Tr.HitPos:ToScreen().x, Tr.HitPos:ToScreen().y, 55 * Size, 32)
@@ -145,20 +145,20 @@ return true
 end
 
 function SWEP:PrimaryAttack()
-	self.Owner:SetAnimation( PLAYER_ATTACK1 )
-	self:SetNextPrimaryFire( CurTime() + self.Primary.Delay/((self.Owner.stamina or 100)/100)-(self.Owner:GetNWInt("Adrenaline")/5) )
+	self:GetOwner():SetAnimation( PLAYER_ATTACK1 )
+	self:SetNextPrimaryFire( CurTime() + self.Primary.Delay/((self:GetOwner().stamina or 100)/100)-(self:GetOwner():GetNWInt("Adrenaline")/5) )
 
 	if SERVER then
-		self.Owner:EmitSound( "weapons/slam/throw.wav",50 )
-		self.Owner.stamina = math.max(self.Owner.stamina - 0.5,0)
+		self:GetOwner():EmitSound( "weapons/slam/throw.wav",50 )
+		self:GetOwner().stamina = math.max(self:GetOwner().stamina - 0.5,0)
 	end
 	self:GetOwner():LagCompensation( true )
-	local ply = self.Owner
+	local ply = self:GetOwner()
 
 	local tra = {}
 	tra.start = ply:GetAttachment(ply:LookupAttachment("eyes")).Pos
 	tra.endpos = tra.start + ply:GetAngles():Forward() * 80
-	tra.filter = self.Owner
+	tra.filter = self:GetOwner()
 	local Tr = util.TraceLine(tra)
 	local t = {}
 	local pos1, pos2
@@ -166,7 +166,7 @@ function SWEP:PrimaryAttack()
 	if not Tr.Hit then
 		t.start = ply:GetAttachment(ply:LookupAttachment("eyes")).Pos
 		t.endpos = t.start + ply:GetAngles():Forward() * 80
-		t.filter = function(ent) return ent ~= self.Owner and (ent:IsPlayer() or ent:IsRagdoll()) end
+		t.filter = function(ent) return ent ~= self:GetOwner() and (ent:IsPlayer() or ent:IsRagdoll()) end
 		t.mins = -Vector(10,10,10)
 		t.maxs = Vector(10,10,10)
 		tr = util.TraceHull(t)
@@ -178,29 +178,29 @@ function SWEP:PrimaryAttack()
 	pos2 = tr.HitPos - tr.HitNormal
 	if true then
 		if SERVER and tr.HitWorld then
-			self.Owner:EmitSound(  "snd_jack_hmcd_knifehit.wav",50  )
+			self:GetOwner():EmitSound(  "snd_jack_hmcd_knifehit.wav",50  )
 		end
 
 		if IsValid( tr.Entity ) and SERVER then
 			local dmginfo = DamageInfo()
 			dmginfo:SetDamageType( DMG_SLASH )
-			dmginfo:SetAttacker( self.Owner )
+			dmginfo:SetAttacker( self:GetOwner() )
 			dmginfo:SetInflictor( self )
 			dmginfo:SetDamagePosition( tr.HitPos )
-			dmginfo:SetDamageForce( self.Owner:GetForward() * self.Primary.Force )
-			local angle = self.Owner:GetAngles().y - tr.Entity:GetAngles().y
+			dmginfo:SetDamageForce( self:GetOwner():GetForward() * self.Primary.Force )
+			local angle = self:GetOwner():GetAngles().y - tr.Entity:GetAngles().y
 			if angle < -180 then angle = 360 + angle end
 
 			dmginfo:SetDamage( self.Primary.Damage / 1.5 )
 
 			if tr.Entity:IsNPC() or tr.Entity:IsPlayer() then
-				self.Owner:EmitSound( "snd_jack_hmcd_slash.wav",50 )
+				self:GetOwner():EmitSound( "snd_jack_hmcd_slash.wav",50 )
 			else
 
 				if tr.Entity:GetClass() == "prop_ragdoll" then
-					self.Owner:EmitSound(  "snd_jack_hmcd_slash.wav",50  )
+					self:GetOwner():EmitSound(  "snd_jack_hmcd_slash.wav",50  )
 				else
-					self.Owner:EmitSound(  "snd_jack_hmcd_knifehit.wav",50  )
+					self:GetOwner():EmitSound(  "snd_jack_hmcd_knifehit.wav",50  )
 				end
 
 			end

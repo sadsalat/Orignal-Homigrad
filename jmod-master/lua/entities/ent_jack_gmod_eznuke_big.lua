@@ -106,7 +106,7 @@ if SERVER then
 		for k = 1, 10 * JMod.Config.NuclearRadiationMult do
 			local Gas = ents.Create("ent_jack_gmod_ezfalloutparticle")
 			Gas:SetPos(self:GetPos())
-			JMod.SetOwner(Gas, self.Owner or game.GetWorld())
+			JMod.SetOwner(Gas, self:GetOwner() or game.GetWorld())
 			Gas:Spawn()
 			Gas:Activate()
 			Gas:GetPhysicsObject():SetVelocity(VectorRand() * math.random(1, 50) + Vector(0, 0, 10 * JMod.Config.NuclearRadiationMult))
@@ -133,7 +133,7 @@ if SERVER then
 	end
 
 	function ENT:JModEZremoteTriggerFunc(ply)
-		if not (IsValid(ply) and ply:Alive() and (ply == self.Owner)) then return end
+		if not (IsValid(ply) and ply:Alive() and (ply == self:GetOwner())) then return end
 		if not (self:GetState() == STATE_ARMED) then return end
 		self:Detonate()
 	end
@@ -182,7 +182,7 @@ if SERVER then
 	function ENT:Detonate()
 		if self.Exploded then return end
 		self.Exploded = true
-		local SelfPos, Att, Power = self:GetPos() + Vector(0, 0, 100), self.Owner or game.GetWorld()
+		local SelfPos, Att, Power = self:GetPos() + Vector(0, 0, 100), self:GetOwner() or game.GetWorld()
 		---
 		SendClientNukeEffect(SelfPos, 9e9)
 		util.ScreenShake(SelfPos, 1000, 15, 15, 50000)

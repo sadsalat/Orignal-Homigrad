@@ -248,7 +248,7 @@ if(SERVER)then
 			self:SetElectricity(0)
 		end
 		---
-		if(self.Owner)then JMod.Colorify(self) end
+		if(self:GetOwner())then JMod.Colorify(self) end
 		---
 		if(self.EZupgradable)then
 			self.UpgradeProgress={}

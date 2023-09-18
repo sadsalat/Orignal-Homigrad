@@ -30,7 +30,7 @@ end
 
 function SWEP:PrimaryAttack()
     if SERVER then
-        local owner = self.Owner
+        local owner = self:GetOwner()
         local tr = {}
         tr.start = owner:GetAttachment(owner:LookupAttachment("eyes")).Pos
         local dir = Vector(1,0,0)
@@ -60,7 +60,7 @@ function SWEP:Think()
     if SERVER then
         if self.CuffPly then
             local pos1 = self.CuffPly:GetPos()
-            local pos2 = self.Owner:GetPos()
+            local pos2 = self:GetOwner():GetPos()
 
             if pos1:Distance(pos2) >= 100 then
                 self.CuffPly = nil
@@ -74,7 +74,7 @@ end
 if SERVER then return end
 
 function SWEP:DrawHUD()
-    local owner = self.Owner
+    local owner = self:GetOwner()
     local tr = {}
     tr.start = owner:GetAttachment(owner:LookupAttachment("eyes")).Pos
     local dir = Vector(1,0,0)

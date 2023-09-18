@@ -46,7 +46,7 @@ if SERVER then
 		if self.Exploded then return end
 		self.Exploded = true
 		local SelfPos, Time = self:GetPos() + Vector(0, 0, 10), CurTime()
-		JMod.Sploom(self.Owner, self:GetPos(), 20)
+		JMod.Sploom(self:GetOwner(), self:GetPos(), 20)
 		self:EmitSound("snd_jack_fragsplodeclose.wav", 90, 140)
 		self:EmitSound("snd_jack_fragsplodeclose.wav", 90, 140)
 		local plooie = EffectData()
@@ -64,7 +64,7 @@ if SERVER then
 
 		timer.Simple(.1, function()
 			if not IsValid(self) then return end
-			util.BlastDamage(self, self.Owner or self, SelfPos, 1000, 2)
+			util.BlastDamage(self, self:GetOwner() or self, SelfPos, 1000, 2)
 		end)
 
 		local Pos = self:GetPos()
