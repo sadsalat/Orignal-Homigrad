@@ -21,7 +21,7 @@ function CLASS.On(self)
     self:SetHealth(150)
     self:SetMaxHealth(150)
 
-    tdm.GiveSwep(self,CLASS.main_weapons,8)
+    --tdm.GiveSwep(self,CLASS.main_weapons,8)
 
     self:Give("weapon_hands")
     self:Give("weapon_hg_hl2")
