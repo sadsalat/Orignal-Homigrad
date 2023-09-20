@@ -679,7 +679,7 @@ function SWEP:UpdateNextIdle()
 end
 
 function SWEP:IsEntSoft(ent)
-	return ent:IsNPC() or ent:IsPlayer() or RagdollOwner(ent)
+	return ent:IsNPC() or ent:IsPlayer() or RagdollOwner(ent) or ent:IsRagdoll()
 end
 
 if CLIENT then
