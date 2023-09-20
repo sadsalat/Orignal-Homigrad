@@ -658,7 +658,7 @@ local CustomWeight = {
 	["models/LeymiRBA/Gyokami/Gyokami.mdl"] = 50,
 	["models/player/smoky/Smoky.mdl"] = 65,
 	["models/player/smoky/Smokycl.mdl"] = 65,
-	["models/knyaje pack/dibil/sso_politepeople.mdl"] = 40
+	["models/knyaje pack/dibil/sso_politepeople.mdl"] = 20
 }
 
 for i = 1,6 do
@@ -1364,7 +1364,7 @@ hook.Add("PlayerSwitchWeapon","fakewep",function(ply,oldwep,newwep)
 		end
 		net.Start("ebal_chellele")
 		net.WriteEntity(ply)
-		net.WriteString(ply.curweapon)
+		net.WriteString(ply.curweapon or "")
 		net.Broadcast()
 		return true
 	end

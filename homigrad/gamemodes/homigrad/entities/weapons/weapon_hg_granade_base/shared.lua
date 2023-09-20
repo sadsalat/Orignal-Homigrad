@@ -45,6 +45,10 @@ function SWEP:Deploy()
     self:SetHoldType( "melee" )
 end
 
+function SWEP:Initialize()
+    self:SetHoldType( "melee" )
+end
+
 function SWEP:PrimaryAttack()
     if SERVER then    
         TrownGranade(self:GetOwner(),750,self.Granade)

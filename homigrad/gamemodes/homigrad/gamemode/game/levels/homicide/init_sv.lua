@@ -35,7 +35,7 @@ local function makeT(ply)
         wep:SetClip1(wep:GetMaxClip1())
 
 
-
+        ply:Give("weapon_hg_t_vxpoison")
         ply:Give("weapon_hidebomb")
         ply:Give("weapon_hg_rgd5")
     elseif homicide.roundType == 2 then
