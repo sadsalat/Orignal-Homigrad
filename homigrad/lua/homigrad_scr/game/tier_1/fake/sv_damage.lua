@@ -68,7 +68,7 @@ end
 local NULLENTITY = Entity(-1)
 
 hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по разным костям регдолла
-	if IsValid(ent:GetPhysicsObject()) and dmginfo:IsDamageType(DMG_BULLET+DMG_BUCKSHOT+DMG_CLUB+DMG_GENERIC+DMG_BLAST) then ent:GetPhysicsObject():ApplyForceOffset((dmginfo:GetDamagePosition() - dmginfo:GetInflictor():GetPos()):GetNormalized() * dmginfo:GetDamage() * 10,dmginfo:GetDamagePosition()) end
+	if IsValid(ent:GetPhysicsObject()) and dmginfo:IsDamageType(DMG_BULLET+DMG_BUCKSHOT+DMG_CLUB+DMG_GENERIC+DMG_BLAST) then ent:GetPhysicsObject():ApplyForceOffset((dmginfo:GetDamagePosition() - dmginfo:GetInflictor():GetPos()):GetNormalized() * math.min(dmginfo:GetDamage() * 10,3000),dmginfo:GetDamagePosition()) end
 	local ply = RagdollOwner(ent) or ent
 	if ent.IsArmor then
 		ply = ent.Owner
