@@ -15,3 +15,5 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2957550771
 and
 
 https://steamcommunity.com/sharedfiles/filedetails/?id=3011836097
+
+We're still updating this gamemode, come and check once in awhile for new updates
