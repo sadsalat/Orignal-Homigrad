@@ -74,13 +74,16 @@ local hg_show_hitposmuzzle = CreateClientConVar("hg_show_hitposmuzzle","0",false
 hook.Add("HUDPaint","admin_hitpos",function()
 	if hg_show_hitposmuzzle:GetBool() and LocalPlayer():IsAdmin() then
 		local wep = LocalPlayer():GetActiveWeapon()
-		if not IsValid(wep) then return end
+		if not IsValid(wep) or wep.Base != "salat_base" then return end
 
 		local att = wep:LookupAttachment("muzzle")
-		if not att then return end
 
 		local att = wep:GetAttachment(att)
-		if not att then return end
+		
+		if not att then
+			local Pos,Ang = wep:GetPosAng()
+			att = {Pos = Pos,Ang = Ang}
+		end
 
 		local shootOrigin = att.Pos
 		local vec = vecZero
@@ -296,9 +299,9 @@ if CLIENT then
 
 		local dist = LocalPlayer():EyePos():Distance(pos)
 		if ent:IsValid() and dist < 1100 then
-			ent:EmitSound(sound,ent.Supressed and 55 or 125,math.random(100,120),1,CHAN_WEAPON,0,0)
+			ent:EmitSound(sound,ent.Supressed and 35 or 125,math.random(100,120),1,CHAN_WEAPON,0,0)
 		elseif ent:IsValid() then
-			ent:EmitSound(farsound,ent.Supressed and 55 or 125,math.random(100,120),1,CHAN_WEAPON,0,0)
+			ent:EmitSound(farsound,ent.Supressed and 35 or 125,math.random(100,120),1,CHAN_WEAPON,0,0)
 		end
 	end)
 end
@@ -446,8 +449,15 @@ function SWEP:FireBullet(dmg, numbul, spread)
 	ply:LagCompensation(true)
 
 	local obj = self:LookupAttachment("muzzle")
-	local Attachment = self:GetOwner():GetActiveWeapon():GetAttachment(obj)
+	
+	local Attachment = self:GetAttachment(obj)
 
+	if not Attachment then
+		local Pos,Ang = self:GetPosAng()
+		
+		Attachment = {Pos = Pos,Ang = Ang}
+	end
+	
 	local cone = self.Primary.Cone
 
 	local shootOrigin = Attachment.Pos

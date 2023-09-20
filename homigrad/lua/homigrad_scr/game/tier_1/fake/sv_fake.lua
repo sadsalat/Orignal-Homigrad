@@ -901,11 +901,6 @@ end)
 
 hook.Add( "KeyPress", "Shooting", function( ply, key )
 	if !ply:Alive() or ply.Otrub then return end
-	if !Automatic[ply.curweapon] then
-		if( key == IN_ATTACK )then
-			if ply.FakeShooting then FireShot(ply.wep) end
-		end
-	end
 
 	if(key == IN_RELOAD)then
 		Reload(ply.wep)
@@ -1013,7 +1008,10 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			if(ply:KeyDown(IN_ATTACK))then--KeyDown if an automatic gun
 				if ply.FakeShooting then FireShot(ply.wep) end
 			end
-		else 
+		else
+			if(ply:KeyPressed(IN_ATTACK))then
+				if ply.FakeShooting then FireShot(ply.wep) end
+			end
 		end
 
 		if(ply:KeyDown(IN_ATTACK2))then

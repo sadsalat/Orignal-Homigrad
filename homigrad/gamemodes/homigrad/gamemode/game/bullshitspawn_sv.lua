@@ -275,7 +275,8 @@ hook.Add("Boxes Think", "SpawnBoxes",function()
 	else
 		ent.Spawned = true
 	end
-
-	ent:SetPos(spawns[math.random(#spawns)] + vec)
-	ent:Spawn()
+	if IsValid(ent) then
+		ent:SetPos(spawns[math.random(#spawns)] + vec)
+		ent:Spawn()
+	end
 end)

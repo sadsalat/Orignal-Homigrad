@@ -36,7 +36,7 @@ Vectors = {
 ["weapon_rpk"]=Vector(3,-1,0),
 ["weapon_ump"]=Vector(2,-1,0),
 ["weapon_m3super"]=Vector(5,-2,0),
-["weapon_hk_usps"]=Vector(4,-1.2,2),
+["weapon_hk_usps"]=Vector(-1,-0.6,1),
 ["weapon_glock"]=Vector(14,0,4),
 ["weapon_mp7"]=Vector(0,0,0),
 ["weapon_remington870"]=Vector(-2,-1,0),
@@ -107,6 +107,10 @@ function SpawnWeapon(ply,clip1)
 				local ang = ply.wep:GetAngles()
 				ang:RotateAroundAxis(ang:Up(),180)
 				ang:RotateAroundAxis(ang:Right(),10)
+				ply.wep:SetAngles(ang)
+			elseif ply.curweapon == "weapon_hk_usps" then
+				local ang = ply.wep:GetAngles()
+				ang:RotateAroundAxis(ang:Forward(),90)
 				ply.wep:SetAngles(ang)
 			end
 
@@ -377,8 +381,8 @@ function FireShot(wep)
 
 	local Attachment = wep:GetAttachment(wep:LookupAttachment("muzzle"))
 
-	local shootOrigin = Attachment.Pos
-	local shootAngles = Attachment.Ang--wep:GetAngles()
+	local shootOrigin = Attachment and Attachment.Pos or wep:GetPos() + wep:GetAngles():Forward() * 10
+	local shootAngles = Attachment and Attachment.Ang or wep:GetAngles()
 	local shootDir = shootAngles:Forward()
 	local damage = weapons.Get(wep.curweapon).Primary.Damage
 	local ply = wep:GetOwner()

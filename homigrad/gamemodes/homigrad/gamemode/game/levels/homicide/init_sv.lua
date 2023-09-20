@@ -31,7 +31,7 @@ local function makeT(ply)
 
     if homicide.roundType == 1 then
         ply:Give("weapon_kabar")
-        local wep = ply:Give("weapon_hk_usp")
+        local wep = ply:Give("weapon_hk_usps")
         wep:SetClip1(wep:GetMaxClip1())
 
 

@@ -80,7 +80,7 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 	end
 
 	local rag = ply ~= ent and ent
-
+	
 	if rag and dmginfo:IsDamageType(DMG_CRUSH) and att and att:IsRagdoll() then
 		dmginfo:SetDamage(0)
 
