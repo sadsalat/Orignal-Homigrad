@@ -374,7 +374,7 @@ function SWEP:PrimaryAttack()
 	end
 
 	if CLIENT and ply == LocalPlayer() then
-		self.ZazhimYaycami = math.min(self.ZazhimYaycami + 2,self.Primary.ClipSize)
+		self.ZazhimYaycami = math.min(self.ZazhimYaycami + 1,self.Primary.ClipSize)
 	end
 	
 	if CLIENT and (self:GetOwner() != LocalPlayer()) then
@@ -667,7 +667,9 @@ function SWEP:Step()
 		
 		self.eyeSpray = LerpAngleFT(0.5,self.eyeSpray,Angle(0,0,0))
 
-		self.ZazhimYaycami = math.max((self.ZazhimYaycami or 0) - 0.1,0)
+		if not ply:KeyDown(IN_ATTACK) then
+			self.ZazhimYaycami = math.max((self.ZazhimYaycami or 0) - 3,0)
+		end
 	end
 
 	if SERVER then

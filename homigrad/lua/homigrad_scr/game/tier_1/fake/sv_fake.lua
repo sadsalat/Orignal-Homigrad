@@ -416,7 +416,7 @@ hook.Add("DoPlayerDeath","blad",function(ply,att,dmginfo)
 	
 	rag:SetNWEntity("RagdollController",Entity(-1))
 
-	if ply.IsBleeding or ply.Bloodlosing > 0 then
+	if ply.IsBleeding or ply.Bloodlosing > 0 or ply.LastDMGInfo:IsDamageType(DMG_BULLET+DMG_SLASH+DMG_BLAST+DMG_ENERGYBEAM+DMG_NEVERGIB+DMG_ALWAYSGIB+DMG_PLASMA+DMG_AIRBOAT+DMG_SNIPER+DMG_BUCKSHOT) then
 		rag.IsBleeding=true
 		rag.bloodNext = CurTime()
 		rag.Blood = ply.Blood
@@ -426,7 +426,7 @@ hook.Add("DoPlayerDeath","blad",function(ply,att,dmginfo)
 	rag.Info = ply.Info
 	rag.deadbody = true
 	deadBodies = deadBodies or {}
-	deadBodies[#deadBodies + 1] = {rag,rag.Info}
+	deadBodies[rag:EntIndex()] = {rag,rag.Info}
 	net.Start("send_deadbodies")
 	net.WriteTable(deadBodies)
 	net.Broadcast()

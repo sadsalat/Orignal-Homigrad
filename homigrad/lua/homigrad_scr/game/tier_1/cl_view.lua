@@ -250,6 +250,7 @@ local deathtrack = {
 	"https://cdn.discordapp.com/attachments/1144224221334097974/1144230250465734797/death3.mp3",
 	"https://cdn.discordapp.com/attachments/1144224221334097974/1144238942862979142/death4.mp3",
 }
+local angZero = Angle(0,0,0)
 local g_station = nil
 local playing = false
 local deathtexts = {
@@ -754,10 +755,9 @@ CalcView = function(ply,vec,ang,fov,znear,zfar)
 	end
 
 	angEye = LerpEye
-
 	vecEye = LerpVector(ScopeLerp,vecEye,vecWep or vecEye)
 	angEye = LerpAngle(ScopeLerp/2,angEye,angWep or angEye)
-
+	
 	if GetConVar("hg_bodycam"):GetInt() == 1 and not scope then
 		local wep = lply:GetActiveWeapon()
 
@@ -818,7 +818,7 @@ CalcView = function(ply,vec,ang,fov,znear,zfar)
 	local val = math.min(math.Round(playerFPS / 120,1),1)
 	
 	diffpos = LerpFT(0.1,diffpos,(output_pos - (oldview.origin or output_pos)) / 6)
-	diffang = LerpFT(0.1,diffang,(output_ang:Forward() - (oldview.angles or output_ang):Forward()) * 50 + output_ang:Up() * anim_pos)
+	diffang = LerpFT(0.1,diffang,(output_ang:Forward() - (oldview.angles or output_ang):Forward()) * 50 + (lply:EyeAngles() + (lply:GetActiveWeapon().eyeSpray or angZero) * 1000):Forward() * anim_pos * 1)
 
 	if RENDERSCENE then
 		if hg_cool_camera:GetBool() then

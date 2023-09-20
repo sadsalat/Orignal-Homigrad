@@ -119,6 +119,13 @@ net.Receive("ply_take_item",function(len,ply)
 		if lootEnt:IsPlayer() then lootEnt:StripWeapon(wep) end
 		lootInfo.Weapons[wep] = nil
 		table.RemoveByValue(lootInfo.Weapons2,wep)
+
+		if lootEnt:IsRagdoll() then
+			deadBodies[lootEnt:EntIndex()] = {lootEnt,lootEnt.Info}
+			net.Start("send_deadbodies")
+			net.WriteTable(deadBodies)
+			net.Broadcast()
+		end
 	end
 
 	send(nil,lootEnt)

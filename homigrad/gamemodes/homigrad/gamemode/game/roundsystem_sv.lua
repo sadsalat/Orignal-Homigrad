@@ -71,7 +71,7 @@ function StartRound()
 		end
 	end
 
-	RunConsoleCommand("hostname","Секретный Сервер! ")
+	RunConsoleCommand("hostname","СEPBEP ЛOХOВ")
 
 	timer.Simple(5,function() flashlightOverride = false end)
 

@@ -101,7 +101,7 @@ function Gib_Input(rag,bone,dmgInfo)
 
 	local dmgPos = dmgInfo:GetDamagePosition()
 
-	if dmgInfo:GetDamage() >= 500 and dmgInfo:IsDamageType(DMG_BLAST) then
+	if dmgInfo:GetDamage() >= 50 and dmgInfo:IsDamageType(DMG_BLAST) then
 	local bone = rag:LookupBone("ValveBiped.Bip01_Spine3")
 	if bone and rag:GetPhysicsObjectNum(bone):Distance(dmgPos) <= 75 then
 		sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
@@ -133,7 +133,7 @@ function Gib_Input(rag,bone,dmgInfo)
 		BloodParticleHeadshoot(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
 	end
 
-	if dmgInfo:GetDamage() >= 100 and dmgInfo:IsDamageType(DMG_BLAST) and not gibRemove[phys_bone] then
+	if dmgInfo:GetDamage() >= 50 and dmgInfo:IsDamageType(DMG_BLAST) and not gibRemove[phys_bone] then
 		local access
 		for bonename in pairs(validBone) do
 			local bone = rag:LookupBone(bonename)
@@ -152,6 +152,7 @@ function Gib_Input(rag,bone,dmgInfo)
 			BloodParticleMore(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 10)
 		end
 	end
+	rag:GetPhysicsObject():SetMass(20)
 end
 
 hook.Add("PlayerDeath","Gib",function(ply)
@@ -159,15 +160,17 @@ hook.Add("PlayerDeath","Gib",function(ply)
 	if not dmgInfo then return end
 
 	--разве это не смешно когда ножом башка взрывается?
-	--не надо убирать
+	--нет
+	
+	if dmgInfo:GetDamage() >= 350 then
+		timer.Simple(0,function()
+			local rag = ply:GetNWEntity("Ragdoll")
+			local bone = rag:LookupBone(ply.LastHitBoneName)
 
-	if dmgInfo:GetDamage() >= 45 * 20 then
-		local rag = ply:GetNWEntity("Ragdoll")
-		local bone = rag:LookupBone(ply.LastHitBoneName)
+			if not IsValid(rag) or not bone then return end--неебу как пашол нахуй
 
-		if not IsValid(rag) or not bone then return end--неебу как пашол нахуй
-
-		Gib_Input(rag,bone,dmgInfo)
+			Gib_Input(rag,bone,dmgInfo)
+		end)
 	end
 end)
 
@@ -180,7 +183,16 @@ hook.Add("EntityTakeDamage","Gib",function(ent,dmgInfo)
 	
 	local phys_bone = GetPhysicsBoneDamageInfo(ent,dmgInfo)
 	if phys_bone == 0 then return end--lol
-	if dmgInfo:GetDamage() < 45 * 5 then return end
+
+	local hitgroup
+
+	local bonename = ent:GetBoneName(ent:TranslatePhysBoneToBone(phys_bone))
+
+	if bonetohitgroup[bonename] then hitgroup = bonetohitgroup[bonename] end
+
+	local mul = RagdollDamageBoneMul[hitgroup]
+	
+	if dmgInfo:GetDamage() * mul < 350 then return end
 	
 	Gib_Input(ent,ent:TranslatePhysBoneToBone(phys_bone),dmgInfo)
 end)

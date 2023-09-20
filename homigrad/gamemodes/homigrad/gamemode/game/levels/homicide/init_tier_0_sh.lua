@@ -184,15 +184,13 @@ function homicide.HUDPaint_RoundLeft(white2)
 end
 
 function homicide.VBWHide(ply,list)
-    if ply:IsPlayer() and ply:Team() == 1002 then return end
+    if (not ply:IsRagdoll() and ply:Team() == 1002) then return end
 
     local blad = {}
-
-    for i = 1,#list do
-        local wep = list[i]
+    
+    for i,wep in pairs(list) do
+        local wep = type(i) == "string" and weapons.Get(i) or list[i]
         
-        if type(wep) == "string" then wep = weapons.Get(wep) end
-
         if not wep.TwoHands then continue end
 
         blad[#blad + 1] = wep
