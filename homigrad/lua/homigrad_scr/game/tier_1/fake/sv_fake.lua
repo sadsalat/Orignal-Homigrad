@@ -133,7 +133,7 @@ function ReturnPlyInfo(ply) -- возвращение информации иг�
 
 end
 
-function Faking(ply) -- функция падения
+function Faking(ply,force) -- функция падения
 	if not ply:Alive() then return end
 
 	if not ply.fake then
@@ -153,7 +153,7 @@ function Faking(ply) -- функция падения
 			ply:ExitVehicle()
 		end
 
-		local rag = ply:CreateRagdoll()
+		local rag = ply:CreateRagdoll(nil,nil,force)
 
 		if IsValid(veh) then
 			rag:GetPhysicsObject():SetVelocity(veh:GetPhysicsObject():GetVelocity() * 5)
@@ -168,7 +168,8 @@ function Faking(ply) -- функция падения
 				SpawnWeapon(ply)
 			end
 
-			--local rag = ply.fakeragdoll
+			ply.walktime = CurTime()
+			
 			rag.bull = ents.Create("npc_bullseye")
 			rag:SetNWEntity("RagdollController",ply)
 			local bull = rag.bull
@@ -584,6 +585,8 @@ hook.Add("PreCleanupMap","cleannoobs",function() --все игроки вста�
 
 end)
 
+util.AddNetworkString("nodraw_helmet")
+
 local function CreateArmor(ragdoll,info)
 	local item = JMod.ArmorTable[info.name]
 	if not item then return end
@@ -613,9 +616,20 @@ local function CreateArmor(ragdoll,info)
 
 	ent:Spawn()
 	ent:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
+
 	if IsValid(ent:GetPhysicsObject()) then
 		ent:GetPhysicsObject():SetMaterial("plastic")
 	end
+
+	timer.Simple(0.1,function()
+		local ply = RagdollOwner(ragdoll)
+		if item.bon == "ValveBiped.Bip01_Head1" and ply and IsValid(ply) and  ply:IsPlayer() then
+			net.Start("nodraw_helmet")
+			net.WriteEntity(ent)
+			net.Send(ply)
+		end
+	end)
+
 	constraint.Weld(ent,ragdoll,0,ragdoll:TranslateBoneToPhysBone(Index),0,true,false)
 
 	ragdoll:DeleteOnRemove(ent)
@@ -689,7 +703,7 @@ net.Receive("custom name",function(len,ply)
 	ply:SetNWString("CustomName",name)
 end)
 
-function PlayerMeta:CreateRagdoll(attacker,dmginfo) --изменение функции регдолла
+function PlayerMeta:CreateRagdoll(attacker,dmginfo,force) --изменение функции регдолла
 	--if not self:Alive() then return end
 	local rag=self:GetNWEntity("Ragdoll")
 	rag.ExplProof = true
@@ -730,7 +744,7 @@ function PlayerMeta:CreateRagdoll(attacker,dmginfo) --изменение фун�
 	rag:Activate()
 	rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 	rag:SetNWEntity("RagdollOwner", self)
-	local vel = self:GetVelocity()/1
+	local vel = self:GetVelocity()/1 + (force or Vector(0,0,0))
 	for i = 0, rag:GetPhysicsObjectCount() - 1 do
 		local physobj = rag:GetPhysicsObjectNum( i )
 		local ragbonename = rag:GetBoneName(rag:TranslatePhysBoneToBone(i))
@@ -902,14 +916,14 @@ end)
 hook.Add( "KeyPress", "Shooting", function( ply, key )
 	if !ply:Alive() or ply.Otrub then return end
 
-	if(key == IN_RELOAD)then
+	if key == IN_RELOAD then
 		Reload(ply.wep)
 	end
 end )
 
 local dvec = Vector(0,0,-64)
 hook.Add("Player Think","FakeControl",function(ply,time) --управление в фейке
-	ply.holdingartery=false
+	ply.holdingartery = false
 	if not ply:Alive() then return end
 	local rag = ply:GetNWEntity("Ragdoll")
 
@@ -934,175 +948,241 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 	local LocalPos, LocalAng = WorldToLocal( lookat, Angle( 0, 0, 0 ), attachment.Pos, attachment.Ang )
 	if !ply.Otrub then rag:SetEyeTarget( LocalPos ) else rag:SetEyeTarget( Vector(0,0,0) ) end
 	if ply:Alive() then
-		--RagdollOwner(rag):SetMoveParent( rag )
-		--RagdollOwner(rag):SetParent( rag )
-	if !ply.Otrub then
-		
-		if ply:KeyDown( IN_JUMP ) and (table.Count(constraint.FindConstraints( ply:GetNWEntity("Ragdoll"), 'Rope' ))>0 or ((rag.IsWeld or 0) > 0)) and ply.stamina>45 and (ply.lastuntietry or 0) < CurTime() then
-			ply.lastuntietry = CurTime() + 2
-			
-			rag.IsWeld = math.max((rag.IsWeld or 0) - 0.1,0)
+		if !ply.Otrub then
+			/*
 
-			local RopeCount = table.Count(constraint.FindConstraints( ply:GetNWEntity("Ragdoll"), 'Rope' ))
-			Ropes = constraint.FindConstraints( ply:GetNWEntity("Ragdoll"), 'Rope' )
-			Try = math.random(1,10*RopeCount)
-			ply.stamina=ply.stamina - 5
-			local phys = rag:GetPhysicsObjectNum( 1 )
-			local speed = 200
-			local shadowparams = {
-				secondstoarrive=0.05,
-				pos=phys:GetPos()+phys:GetAngles():Forward()*20,
-				angle=phys:GetAngles(),
-				maxangulardamp=30,
-				maxspeeddamp=30,
-				maxangular=90,
-				maxspeed=speed,
-				teleportdistance=0,
-				deltatime=0.01,
-			}
-			phys:Wake()
-			phys:ComputeShadowControl(shadowparams)
-			if Try > (7*RopeCount) or ((rag.IsWeld or 0) > 0) then
-				if RopeCount>1 or (rag.IsWeld or 0 > 0) then
-					if RopeCount > 1 then
-						ply:ChatPrint("Осталось: "..RopeCount - 1)
-					end
-					if (rag.IsWeld or 0) > 0 then
-						ply:ChatPrint("Осталось отбить гвоздей: "..tostring(math.ceil(rag.IsWeld)))
-						ply.Bloodlosing = ply.Bloodlosing + 10
-						ply.pain = ply.pain + 20
+			local walkTime = 1
+			local tr = {start = rag:GetPos(),endpos = rag:GetPos() + vector_up * -35,filter = {ply,rag,ply.wep},collisiongroup = COLLISION_GROUP_WEAPON}
+			tr = util.TraceLine(tr)
+			if tr.Hit and (ply.walktime + walkTime or 0) > CurTime() and ply.Organs["spine"]!=0 then
+				local lleg = rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_L_Foot"))
+				local rleg = rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Foot"))
+				lleg = rag:GetPhysicsObjectNum(lleg)
+				rleg = rag:GetPhysicsObjectNum(rleg)
+
+				local angs = ply:EyeAngles()
+
+				local ragpos = head:GetPos()
+				ragpos[3] = lleg:GetPos()[3]
+
+				local ldist = lleg:GetPos():Distance(ragpos)
+				local rdist = rleg:GetPos():Distance(ragpos)
+				local legdist = rleg:GetPos():Distance(lleg:GetPos())
+				ragpos:Add(angs:Forward() * 20 + rag:GetVelocity() / 10 - vector_up * 2)
+				local walkMoment = (ply.walktime + walkTime - CurTime()) / walkTime
+				lleg_goes = walkMoment * walkTime
+				
+				if math.Round(lleg_goes) % 2 == 0 then
+					if ldist > 0 then
+						local shadowparams = {
+							secondstoarrive = 0.5,
+							pos = tr.HitPos + angs:Forward() * 20 + rag:GetVelocity() / 10,
+							angle = Angle(angs[1]+90,angs[2]+90,angs[3]),
+							maxangulardamp = 10,
+							maxspeeddamp = 10,
+							maxangular = 330,
+							maxspeed = 330 * walkMoment,
+							teleportdistance = 0,
+							deltatime = deltatime,
+						}
+						lleg:Wake()
+						lleg:ComputeShadowControl(shadowparams)
 					end
 				else
-					ply:ChatPrint("Ты развязался")
+					if rdist > 0 then
+						local shadowparams = {
+							secondstoarrive = 0.5,
+							pos = tr.HitPos + angs:Forward() * 20 + rag:GetVelocity() / 10,
+							angle = Angle(angs[1]+90,angs[2]+90,angs[3]),
+							maxangulardamp = 10,
+							maxspeeddamp = 10,
+							maxangular = 330,
+							maxspeed = 330 * walkMoment,
+							teleportdistance = 0,
+							deltatime = deltatime,
+						}
+						rleg:Wake()
+						rleg:ComputeShadowControl(shadowparams)
+					end
 				end
-				Ropes[1].Constraint:Remove()
-				rag:EmitSound("snd_jack_hmcd_ducttape.wav",90,50,0.5,CHAN_AUTO)
-			end
-		end
 
-		if(ply:KeyDown(IN_ATTACK))then
-			local pos = ply:EyePos()
-			pos[3] = head:GetPos()[3]
-            if !ply.FakeShooting and !ply.arterybleeding then
-				local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) )
-				local ang=ply:EyeAngles()
-				ang:RotateAroundAxis(eyeangs:Forward(),90)
-				ang:RotateAroundAxis(eyeangs:Right(),75)
+				local phys = rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_Spine"))
+				phys = rag:GetPhysicsObjectNum(phys)
+
+				angs:RotateAroundAxis(angs:Forward(),90)
+				angs:RotateAroundAxis(angs:Right(),-90)
+				angs:Add(Angle(0,(1 - walkMoment) * 90,0))
 				local shadowparams = {
-					secondstoarrive=0.4,
-					pos=head:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*-5,
-					angle=ang,
-					maxangular=670,
-					maxangulardamp=600,
-					maxspeeddamp=50,
-					maxspeed=500,
+					secondstoarrive = 0.5,
+					pos = tr.HitPos + vector_up * 50 * walkMoment - rag:GetVelocity() / 50,
+					angle = angs,
+					maxangulardamp = 10,
+					maxspeeddamp = 10,
+					maxangular = 370,
+					maxspeed = 550 * walkMoment,
+					teleportdistance = 0,
+					deltatime = deltatime,
+				}
+				phys:Wake()
+				phys:ComputeShadowControl(shadowparams)
+			end
+
+			*/
+			--потом...
+			if ply:KeyDown( IN_JUMP ) and (table.Count(constraint.FindConstraints( ply:GetNWEntity("Ragdoll"), 'Rope' ))>0 or ((rag.IsWeld or 0) > 0)) and ply.stamina>45 and (ply.lastuntietry or 0) < CurTime() then
+				ply.lastuntietry = CurTime() + 2
+				
+				rag.IsWeld = math.max((rag.IsWeld or 0) - 0.1,0)
+
+				local RopeCount = table.Count(constraint.FindConstraints( ply:GetNWEntity("Ragdoll"), 'Rope' ))
+				Ropes = constraint.FindConstraints( ply:GetNWEntity("Ragdoll"), 'Rope' )
+				Try = math.random(1,10*RopeCount)
+				ply.stamina=ply.stamina - 5
+				local phys = rag:GetPhysicsObjectNum( 1 )
+				local speed = 200
+				local shadowparams = {
+					secondstoarrive=0.05,
+					pos=phys:GetPos()+phys:GetAngles():Forward()*20,
+					angle=phys:GetAngles(),
+					maxangulardamp=30,
+					maxspeeddamp=30,
+					maxangular=90,
+					maxspeed=speed,
 					teleportdistance=0,
 					deltatime=0.01,
 				}
 				phys:Wake()
 				phys:ComputeShadowControl(shadowparams)
+				if Try > (7*RopeCount) or ((rag.IsWeld or 0) > 0) then
+					if RopeCount>1 or (rag.IsWeld or 0 > 0) then
+						if RopeCount > 1 then
+							ply:ChatPrint("Осталось: "..RopeCount - 1)
+						end
+						if (rag.IsWeld or 0) > 0 then
+							ply:ChatPrint("Осталось отбить гвоздей: "..tostring(math.ceil(rag.IsWeld)))
+							ply.Bloodlosing = ply.Bloodlosing + 10
+							ply.pain = ply.pain + 20
+						end
+					else
+						ply:ChatPrint("Ты развязался")
+					end
+					Ropes[1].Constraint:Remove()
+					rag:EmitSound("snd_jack_hmcd_ducttape.wav",90,50,0.5,CHAN_AUTO)
+				end
 			end
-		end
 
-		if Automatic[ply.curweapon] then
-			if(ply:KeyDown(IN_ATTACK))then--KeyDown if an automatic gun
-				if ply.FakeShooting then FireShot(ply.wep) end
-			end
-		else
-			if(ply:KeyPressed(IN_ATTACK))then
-				if ply.FakeShooting then FireShot(ply.wep) end
-			end
-		end
-
-		if(ply:KeyDown(IN_ATTACK2))then
-			local physa = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
-			local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) ) --rhand
-			local ang=ply:EyeAngles() --LerpAngle(0.5,ply:EyeAngles(),ply:GetNWEntity("Ragdoll"):GetAttachment(1).Ang)
-			ang:RotateAroundAxis(eyeangs:Forward(),90)
-			ang:RotateAroundAxis(eyeangs:Right(),75)
-			local pos = ply:EyePos()
-			pos[3] = head:GetPos()[3]
-			local shadowparams = {
-				secondstoarrive=0.4,
-				pos=head:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*15,
-				angle=ang,
-				maxangular=670,
-				maxangulardamp=100,
-				maxspeeddamp=50,
-				maxspeed=600,
-				teleportdistance=0,
-				deltatime=0.01,
-			}--я расстояние выбирал специально чтобы можно было большую скорость ставить, а че вы сделали что бы оно не улетали модельки, типо алянсеров
-			physa:Wake()
-			if (!ply.suiciding or TwoHandedOrNo[ply.curweapon]) then
-				if TwoHandedOrNo[ply.curweapon] and IsValid(ply.wep) then
-					local ang = ply:EyeAngles()
-					ang:RotateAroundAxis(ang:Forward(),90)
-					ang:RotateAroundAxis(ang:Up(),20)
-					ang:RotateAroundAxis(ang:Right(),10)
-					shadowparams.angle = ang
-
-					ply.wep:GetPhysicsObject():ComputeShadowControl(shadowparams)
-
-					shadowparams.pos=shadowparams.pos--+eyeangs:Right()*20
+			if(ply:KeyDown(IN_ATTACK))then
+				local pos = ply:EyePos()
+				pos[3] = head:GetPos()[3]
+				if !ply.FakeShooting and ply.Organs["artery"]!=0 then
+					local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) )
+					local ang=ply:EyeAngles()
+					ang:RotateAroundAxis(eyeangs:Forward(),90)
+					ang:RotateAroundAxis(eyeangs:Right(),75)
+					local shadowparams = {
+						secondstoarrive=0.4,
+						pos=head:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*-5,
+						angle=ang,
+						maxangular=670,
+						maxangulardamp=600,
+						maxspeeddamp=50,
+						maxspeed=500,
+						teleportdistance=0,
+						deltatime=0.01,
+					}
+					phys:Wake()
 					phys:ComputeShadowControl(shadowparams)
-					shadowparams.pos=shadowparams.pos+eyeangs:Forward()*-50+eyeangs:Right()*-15
-					physa:ComputeShadowControl(shadowparams)
+				end
+			end
 
-				elseif IsValid(ply.wep) and IsValid(ply.wep:GetPhysicsObject())then
-					
-					ang:RotateAroundAxis(ply:EyeAngles():Forward(),90)
-					ang:RotateAroundAxis(ply:EyeAngles():Up(),110)
-					ang:RotateAroundAxis(eyeangs:Right(),-30)
-					--ang:RotateAroundAxis(eyeangs:Up(),60)
-					--ang:RotateAroundAxis(eyeangs:Right(),-45)
-					--ang:RotateAroundAxis(eyeangs:Up(),-45)
-					shadowparams.angle=ang
-					shadowparams.pos=shadowparams.pos+eyeangs:Right()*-15
-
-					ply.wep:GetPhysicsObject():ComputeShadowControl(shadowparams)
-					physa:ComputeShadowControl(shadowparams)
-				else
-					physa:ComputeShadowControl(shadowparams)
+			if ply.curweapon and weapons.Get(ply.curweapon).Primary.Automatic then
+				if ply:KeyDown(IN_ATTACK) then
+					if ply.FakeShooting then FireShot(ply.wep) end
 				end
 			else
-				if ply.FakeShooting and IsValid(ply.wep) then
-					shadowparams.maxspeed=500
-					shadowparams.maxangular=500
-					shadowparams.pos=head:GetPos()-ply.wep:GetAngles():Forward()*12
-					shadowparams.angle=ply.wep:GetPhysicsObject():GetAngles()
-					ply.wep:GetPhysicsObject():ComputeShadowControl(shadowparams)
-					physa:ComputeShadowControl(shadowparams)
+				if ply:KeyPressed(IN_ATTACK) then
+					if ply.FakeShooting then FireShot(ply.wep) end
 				end
 			end
-			--[[physa:ComputeShadowControl(shadowparams)
-			if TwoHandedOrNo[ply.curweapon] then
-				shadowparams.maxspeed=90
-				ply.wep:GetPhysicsObject():ComputeShadowControl(shadowparams)
-				shadowparams.maxspeed=20
-				shadowparams.angle:RotateAroundAxis(eyeangs:Forward(),90)
-				phys:ComputeShadowControl(shadowparams) --if 2handed
-			end--]]
-		end
-		if(ply:KeyDown(IN_USE))then
-			local phys = head
-			local angs = ply:EyeAngles()
-			angs:RotateAroundAxis(angs:Forward(),90)
-			--angs:RotateAroundAxis(angs:Up(),20)
-			local shadowparams = {
-				secondstoarrive=0.5,
-				pos=head:GetPos()+vector_up*(20/math.Clamp(rag:GetVelocity():Length()/300,1,12)),
-				angle=angs,
-				maxangulardamp=10,
-				maxspeeddamp=10,
-				maxangular=370,
-				maxspeed=40,
-				teleportdistance=0,
-				deltatime=deltatime,
-			}
-			head:Wake()
-			head:ComputeShadowControl(shadowparams)
-		end
+
+			if(ply:KeyDown(IN_ATTACK2))then
+				local physa = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
+				local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) ) --rhand
+				local ang=ply:EyeAngles()
+				ang:RotateAroundAxis(eyeangs:Forward(),90)
+				ang:RotateAroundAxis(eyeangs:Right(),75)
+				local pos = ply:EyePos()
+				pos[3] = head:GetPos()[3]
+				local shadowparams = {
+					secondstoarrive=0.4,
+					pos=head:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*15,
+					angle=ang,
+					maxangular=670,
+					maxangulardamp=100,
+					maxspeeddamp=50,
+					maxspeed=600,
+					teleportdistance=0,
+					deltatime=0.01,
+				}
+				physa:Wake()
+				if (!ply.suiciding or TwoHandedOrNo[ply.curweapon]) then
+					if TwoHandedOrNo[ply.curweapon] and IsValid(ply.wep) then
+						local ang = ply:EyeAngles()
+						ang:RotateAroundAxis(ang:Forward(),90)
+						ang:RotateAroundAxis(ang:Up(),20)
+						ang:RotateAroundAxis(ang:Right(),10)
+						shadowparams.angle = ang
+
+						ply.wep:GetPhysicsObject():ComputeShadowControl(shadowparams)
+
+						shadowparams.pos=shadowparams.pos
+						phys:ComputeShadowControl(shadowparams)
+						shadowparams.pos=shadowparams.pos+eyeangs:Forward()*-50+eyeangs:Right()*-15
+						physa:ComputeShadowControl(shadowparams)
+
+					elseif IsValid(ply.wep) and IsValid(ply.wep:GetPhysicsObject())then
+
+						ang:RotateAroundAxis(ply:EyeAngles():Forward(),90)
+						ang:RotateAroundAxis(ply:EyeAngles():Up(),110)
+						ang:RotateAroundAxis(eyeangs:Right(),-30)
+
+						shadowparams.angle=ang
+						shadowparams.pos=shadowparams.pos+eyeangs:Right()*-15
+
+						ply.wep:GetPhysicsObject():ComputeShadowControl(shadowparams)
+						physa:ComputeShadowControl(shadowparams)
+					else
+						physa:ComputeShadowControl(shadowparams)
+					end
+				else
+					if ply.FakeShooting and IsValid(ply.wep) then
+						shadowparams.maxspeed=500
+						shadowparams.maxangular=500
+						shadowparams.pos=head:GetPos()-ply.wep:GetAngles():Forward()*12
+						shadowparams.angle=ply.wep:GetPhysicsObject():GetAngles()
+						ply.wep:GetPhysicsObject():ComputeShadowControl(shadowparams)
+						physa:ComputeShadowControl(shadowparams)
+					end
+				end
+			end
+			if(ply:KeyDown(IN_USE))then
+				local phys = head
+				local angs = ply:EyeAngles()
+				angs:RotateAroundAxis(angs:Forward(),90)
+				local shadowparams = {
+					secondstoarrive=0.5,
+					pos=head:GetPos()+vector_up*(20/math.Clamp(rag:GetVelocity():Length()/300,1,12)),
+					angle=angs,
+					maxangulardamp=10,
+					maxspeeddamp=10,
+					maxangular=370,
+					maxspeed=40,
+					teleportdistance=0,
+					deltatime=deltatime,
+				}
+				head:Wake()
+				head:ComputeShadowControl(shadowparams)
+			end
 		end
 		if(ply:KeyDown(IN_SPEED)) and (RagdollOwner(rag) and !RagdollOwner(rag).Otrub) and !timer.Exists("StunTime"..ply:EntIndex()) then
 			local bone = rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" ))
@@ -1217,23 +1297,6 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 				}
 				phys:Wake()
 				phys:ComputeShadowControl(shadowparams)
-				--[[
-				shadowparams.pos=phys:GetPos()+ply:EyeAngles():Right()*-300
-				rag:GetPhysicsObjectNum( 11 ):Wake()
-				rag:GetPhysicsObjectNum( 11 ):ComputeShadowControl(shadowparams)				-переделывай говно
-				shadowparams.pos=phys:GetPos()-ply:EyeAngles():Forward()*300
-				rag:GetPhysicsObjectNum( 9 ):Wake()
-				rag:GetPhysicsObjectNum( 9 ):ComputeShadowControl(shadowparams)
-				shadowparams.pos=lh:GetPos()
-				--]]
-				--[[local angre=ply:EyeAngles()
-				angre:RotateAroundAxis(ply:EyeAngles():Forward(),-90)
-				shadowparams.angle=angre
-				shadowparams.maxangular=100
-				shadowparams.pos=rag:GetPhysicsObjectNum( 1 ):GetPos()
-				shadowparams.secondstoarrive=1
-				rag:GetPhysicsObjectNum( 0 ):Wake()
-				rag:GetPhysicsObjectNum( 0 ):ComputeShadowControl(shadowparams)]]--
 			end
 		end
 		if(ply:KeyDown(IN_FORWARD) and IsValid(rag.ZacConsRH))then
@@ -1258,23 +1321,6 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 				}
 				phys:Wake()
 				phys:ComputeShadowControl(shadowparams)
-				--[[
-				shadowparams.pos=phys:GetPos()+ply:EyeAngles():Right()*300
-				rag:GetPhysicsObjectNum( 9 ):Wake()
-				rag:GetPhysicsObjectNum( 9 ):ComputeShadowControl(shadowparams)				-переделывай говно
-				shadowparams.pos=phys:GetPos()-ply:EyeAngles():Forward()*300
-				rag:GetPhysicsObjectNum( 11 ):Wake()
-				rag:GetPhysicsObjectNum( 11 ):ComputeShadowControl(shadowparams)
-				shadowparams.pos=rh:GetPos()
-				--]]
-				--[[local angre2=ply:EyeAngles()
-				angre2:RotateAroundAxis(ply:EyeAngles():Forward(),90)
-				shadowparams.angle=angre2
-				shadowparams.maxangular=100
-				shadowparams.pos=rag:GetPhysicsObjectNum( 1 ):GetPos()
-				shadowparams.secondstoarrive=1
-				rag:GetPhysicsObjectNum( 0 ):Wake()
-				rag:GetPhysicsObjectNum( 0 ):ComputeShadowControl(shadowparams)]]--
 			end
 		end
 		if(ply:KeyDown(IN_BACK) and IsValid(rag.ZacConsLH))then

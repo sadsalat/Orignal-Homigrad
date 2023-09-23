@@ -27,8 +27,8 @@ SWEP.SlotPos				= 2
 SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
 
-SWEP.ViewModel				= "models/maxofs2d/camera.mdl"
-SWEP.WorldModel				= "models/maxofs2d/camera.mdl"
+SWEP.ViewModel				= "models/customstuff/binoculars.mdl"
+SWEP.WorldModel				= "models/customstuff/binoculars.mdl"
 
 SWEP.ViewBack = true
 SWEP.ForceSlot1 = true
@@ -116,3 +116,51 @@ hook.Add("HUDPaint","binokle",function()
         draw.SimpleText(i * step,"DefaultFixedDropShadow",pos.x,25,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
     end
 end)
+
+if SERVER then return end
+
+SWEP.dwmModeScale = 1
+SWEP.dwmForward = 3
+SWEP.dwmRight = 6
+SWEP.dwmUp = -2
+
+SWEP.dwmAUp = 0
+SWEP.dwmARight = 190
+SWEP.dwmAForward = -10
+
+local model = GDrawWorldModel or ClientsideModel(SWEP.WorldModel,RENDER_GROUP_OPAQUE_ENTITY)
+GDrawWorldModel = model
+model:SetNoDraw(true)
+
+function SWEP:DrawWorldModel()
+    local owner = self:GetOwner()
+    if not IsValid(owner) then
+        self:DrawModel()
+
+        return
+    end
+
+    local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
+    if not Pos then return end
+
+    model:SetModel(self.WorldModel)
+    
+    Pos:Add(Ang:Forward() * self.dwmForward)
+    Pos:Add(Ang:Right() * self.dwmRight)
+    Pos:Add(Ang:Up() * self.dwmUp)
+
+    model:SetPos(Pos)
+
+    Ang:RotateAroundAxis(Ang:Up(),self.dwmAUp)
+    Ang:RotateAroundAxis(Ang:Right(),self.dwmARight)
+    Ang:RotateAroundAxis(Ang:Forward(),self.dwmAForward)
+    model:SetAngles(Ang)
+
+    model:SetModelScale(self.dwmModeScale)
+
+    local isFocus = self:GetNWBool("Focus")
+
+    if not isFocus or not firstPerson then
+        model:DrawModel()
+    end
+end

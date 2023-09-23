@@ -389,6 +389,12 @@ local view = {}
 ADDFOV = 0
 ADDROLL = 0
 
+local helmEnt
+
+net.Receive("nodraw_helmet",function()
+	helmEnt = net.ReadEntity()
+end)
+
 CalcView = function(ply,vec,ang,fov,znear,zfar)
 	if STOPRENDER then return end
 	local fov = CameraSetFOV + ADDFOV
@@ -495,6 +501,10 @@ CalcView = function(ply,vec,ang,fov,znear,zfar)
 			fov = fov,
 			drawviewer = true
 		}
+
+		if IsValid(helmEnt) then
+			helmEnt:SetNoDraw(true)
+		end
 
 		return view
 	end

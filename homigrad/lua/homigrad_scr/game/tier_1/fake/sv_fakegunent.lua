@@ -259,7 +259,7 @@ function Reload(wep)
 	if ShootWait[wep.curweapon]==nil then return nil end
 	local ply = wep:GetOwner()
 	if !timer.Exists("reload"..wep:EntIndex()) and wep.Clip!=wep.MaxClip and wep.Amt>0 then
-		wep:EmitSound( ReloadSound[wep.curweapon], 75, 100, 1 )
+		wep:EmitSound( "weapons/smg1/smg1_reload.wav", 75, 100, 1 )
 		timer.Create("reload"..wep:EntIndex(), weptable.ReloadTime, 1, function()
 			if IsValid(wep) then
 				local oldclip = wep.Clip
@@ -336,7 +336,7 @@ function FireShot(wep)
 				self:FireBullets({
 					Attacker=self:GetOwner(),
 					Damage=weapons.Get(wep.curweapon).Primary.Damage*.65,
-					Force=weapons.Get(wep.curweapon).Primary.Force/60,
+					Force=weapons.Get(wep.curweapon).Primary.Force / 40 *.65,
 					Num=1,
 					Tracer=0,
 					TracerName="",
@@ -390,10 +390,10 @@ function FireShot(wep)
 		bullet.Num 			= (weptable.NumBullet or 1)
 		bullet.Src 			= shootOrigin
 		bullet.Dir 			= shootDir
-		bullet.Spread 		= Vector(cir[wep.curweapon] or 0,cir[wep.curweapon]or 0,0)
+		bullet.Spread 		= Vector(weptable.Primary.Cone or 0,weptable.Primary.Cone or 0,0)
 		bullet.Tracer		= 1
 		bullet.TracerName 	= 4
-		bullet.Force		= weptable.Primary.Force / 40
+		bullet.Force		= weptable.Primary.Force / 90
 		bullet.Damage		= damage
 		bullet.Attacker 	= ply
 		bullet.Callback=function(ply,tr)
