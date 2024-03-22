@@ -1,0 +1,43 @@
+SWEP.Base = "salat_base" -- base 
+SWEP.PrintName = "MP5"
+SWEP.Author = "Heckler & Koch"
+SWEP.Instructions = "Что может еще делать пистолет? СТРЕЛЯТЬ В ЛИЦО!"
+SWEP.Category = "Оружие"
+SWEP.Spawnable = true
+SWEP.AdminOnly = false
+------------------------------------------
+SWEP.Primary.ClipSize = 30
+SWEP.Primary.DefaultClip = SWEP.Primary.ClipSize * 2
+SWEP.Primary.Automatic = true
+SWEP.Primary.Ammo = "9mmRound"
+SWEP.Primary.Cone = 0.01
+SWEP.Primary.Damage = 65
+SWEP.Primary.Spread = 5
+SWEP.Primary.Sound = "weapons/mp5navy/mp5-1.wav"
+SWEP.Primary.Force = 20
+SWEP.ReloadTime = 2
+SWEP.ShootWait = 0.06
+SWEP.TwoHands = true
+SWEP.Secondary.ClipSize = -1
+SWEP.Secondary.DefaultClip = -1
+SWEP.Secondary.Automatic = false
+SWEP.Secondary.Ammo = "none"
+------------------------------------------
+SWEP.Weight = 5
+SWEP.AutoSwitchTo = false
+SWEP.AutoSwitchFrom = false
+SWEP.HoldType = "ar2"
+------------------------------------------
+SWEP.Slot = 2
+SWEP.SlotPos = 2
+SWEP.DrawAmmo = true
+SWEP.DrawCrosshair = false
+SWEP.ViewModel = "models/weapons/salatbase/w_smg_mp5.mdl"
+SWEP.WorldModel = "models/weapons/salatbase/w_smg_mp5.mdl"
+SWEP.addPos = Vector(10, -1.05, 7)
+SWEP.addAng = Angle(-8.5, 2.2, 0)
+SWEP.sightPos = Vector(7, 6, 1.33)
+SWEP.sightAng = Angle(-2, 2, 0)
+SWEP.fakeHandRight = Vector(6, -2, 0)
+SWEP.fakeHandLeft = Vector(13, -4, -7)
+SWEP.Recoil = 0.4

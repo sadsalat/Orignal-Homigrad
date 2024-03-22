@@ -1,6 +1,0 @@
-"UnlitGeneric"
-{
-	"$baseTexture"		"WeltEnSTurm/heli/rotorblur"
-	"$model"			"1"
-	"$translucent" 		"1"
-}

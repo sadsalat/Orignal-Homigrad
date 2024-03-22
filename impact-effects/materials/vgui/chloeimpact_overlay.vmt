@@ -1,8 +1,0 @@
-"UnlitGeneric"
-{
-	"$basetexture" "vgui/chloeimpact_overlay"
-	"$translucent" "1"
-	"$vertexcolor" "1"
-	"$vertexalpha" "1"
-	"$color" "[0.5 0.6 0.6]"
-}

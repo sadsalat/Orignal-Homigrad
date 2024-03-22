@@ -1,0 +1,43 @@
+SWEP.Base = "salat_base" -- base 
+SWEP.PrintName = "Galil"
+SWEP.Instructions = "GALIL! БАМ БАМ БАМ!"
+SWEP.Category = "Оружие"
+SWEP.Spawnable = true
+SWEP.AdminOnly = false
+------------------------------------------
+SWEP.Primary.ClipSize = 35
+SWEP.Primary.DefaultClip = SWEP.Primary.ClipSize * 2
+SWEP.Primary.Automatic = true
+SWEP.Primary.Ammo = "ar2"
+SWEP.Primary.Cone = 0
+SWEP.Primary.Damage = 220
+SWEP.Primary.Spread = 0
+SWEP.Primary.Sound = "weapons/galil/galil-1.wav"
+SWEP.Primary.Force = 110
+SWEP.ReloadTime = 2
+SWEP.ShootWait = 0.09
+SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
+SWEP.TwoHands = true
+SWEP.Secondary.ClipSize = -1
+SWEP.Secondary.DefaultClip = -1
+SWEP.Secondary.Automatic = false
+SWEP.Secondary.Ammo = "none"
+------------------------------------------
+SWEP.Weight = 5
+SWEP.AutoSwitchTo = false
+SWEP.AutoSwitchFrom = false
+SWEP.HoldType = "ar2"
+------------------------------------------
+SWEP.Slot = 2
+SWEP.SlotPos = 2
+SWEP.DrawAmmo = true
+SWEP.DrawCrosshair = false
+SWEP.ViewModel = "models/weapons/salatbase/w_rif_galil.mdl"
+SWEP.WorldModel = "models/weapons/salatbase/w_rif_galil.mdl"
+SWEP.addPos = Vector(10, -1.05, 5)
+SWEP.addAng = Angle(-10, -0.05, 0)
+SWEP.sightPos = Vector(5.1, 6, 0.75)
+SWEP.sightAng = Angle(-5, -2.5, 0)
+SWEP.fakeHandRight = Vector(12, -2, 0)
+SWEP.fakeHandLeft = Vector(13, -3, -5)
+SWEP.Recoil = 0.5

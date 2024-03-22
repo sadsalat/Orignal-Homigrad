@@ -1,0 +1,7 @@
+"homigrad"
+{
+	"base"			"sandbox"
+	"title"			"Homigrad"
+	"maps"			"^hmcd_|^tdm_|^dm_|^mu_|^ttt_"
+	"menusystem"	"1"
+}

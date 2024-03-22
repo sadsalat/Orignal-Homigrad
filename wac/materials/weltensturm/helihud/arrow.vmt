@@ -1,6 +1,0 @@
-"UnlitGeneric"
-{
-	"$baseTexture"		"WeltEnSTurm/helihud/arrow"
-	"$model"				"1"
-	"$translucent" 		"1"
-}

@@ -1,0 +1,43 @@
+SWEP.Base = "salat_base" -- base 
+SWEP.PrintName = "TMP"
+SWEP.Instructions = "Что может еще делать ПП? СТРЕЛЯТЬ В ЛИЦО!"
+SWEP.Category = "Оружие"
+SWEP.Spawnable = true
+SWEP.AdminOnly = false
+------------------------------------------
+SWEP.Primary.ClipSize = 30
+SWEP.Primary.DefaultClip = SWEP.Primary.ClipSize * 2
+SWEP.Primary.Automatic = true
+SWEP.Primary.Ammo = "pistol"
+SWEP.Primary.Cone = 0
+SWEP.Primary.Damage = 65
+SWEP.Primary.Spread = 0
+SWEP.Primary.Sound = "weapons/tmp/tmp-1.wav"
+SWEP.Primary.Force = 10
+SWEP.ReloadTime = 2
+SWEP.ShootWait = 0.05
+SWEP.TwoHands = true
+SWEP.Secondary.ClipSize = -1
+SWEP.Secondary.DefaultClip = -1
+SWEP.Secondary.Automatic = false
+SWEP.Secondary.Ammo = "none"
+------------------------------------------
+SWEP.Weight = 5
+SWEP.AutoSwitchTo = false
+SWEP.AutoSwitchFrom = false
+SWEP.HoldType = "revolver"
+------------------------------------------
+SWEP.Slot = 1
+SWEP.SlotPos = 2
+SWEP.DrawAmmo = true
+SWEP.DrawCrosshair = false
+SWEP.ViewModel = "models/weapons/salatbase/w_smg_tmp.mdl"
+SWEP.WorldModel = "models/weapons/salatbase/w_smg_tmp.mdl"
+SWEP.addPos = Vector(10, -0.9, 5)
+SWEP.addAng = Angle(-10, 0.95, 0)
+SWEP.sightPos = Vector(3.35, 10, 1.08)
+SWEP.sightAng = Angle(-5, -2, 0)
+SWEP.fakeHandRight = Vector(6, -1, 3)
+SWEP.fakeHandLeft = Vector(5, -3, 0)
+SWEP.DoFlash = false
+SWEP.Recoil = 0.1

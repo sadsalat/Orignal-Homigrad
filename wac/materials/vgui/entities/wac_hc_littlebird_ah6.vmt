@@ -1,7 +1,0 @@
-"UnlitGeneric"
-{
-	"$basetexture"			"VGUI/entities/wac_hc_littlebird_ah6.vmt"
-	"$vertexcolor" 			1
-	"$vertexalpha" 			1
-	"$nolod" 				1
-}
