@@ -16,7 +16,7 @@ and
 
 https://steamcommunity.com/sharedfiles/filedetails/?id=3011836097
 
-We're still updating this gamemode, come and check once in awhile for new updates
+~~We're still updating this gamemode, come and check once in awhile for new updates~~ Hellna
 
 плыв
 плыв
